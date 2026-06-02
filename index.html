@@ -436,6 +436,7 @@ body{
       <div>
         <div class="sidebar-wordmark">Strata</div>
         <div class="sidebar-tagline">where life becomes art</div>
+      <div id="sync-status" style="font-size:8px;font-family:var(--mono);color:#9c8e7a;margin-top:3px"></div>
       </div>
       <div class="sidebar-dots" id="sidebar-dots"></div>
     </div>
@@ -514,6 +515,40 @@ body{
         <canvas id="garden-canvas" style="display:block;width:100%;height:100%"></canvas>
       </div>
       <div style="font-size:9px;font-family:var(--mono);color:var(--ink3);padding:0.3rem 0 0.1rem;flex-shrink:0" id="garden-stat"></div>
+    </div>
+
+    <!-- More / Settings view -->
+    <div class="view" id="view-more">
+      <div class="month-title" style="margin-bottom:1.25rem">More</div>
+
+      <div style="display:flex;flex-direction:column;gap:1rem">
+
+        <!-- About -->
+        <div style="background:var(--bg2);border-radius:10px;padding:1rem;border:1px solid var(--border)">
+          <div style="font-size:7px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink3);font-family:var(--mono);margin-bottom:0.5rem">About</div>
+          <div style="font-family:var(--serif);font-size:18px;font-weight:700;font-style:italic;color:var(--ink)">Strata</div>
+          <div style="font-size:9px;font-family:var(--mono);color:var(--ink3);margin-top:2px">where life becomes art</div>
+          <div style="font-size:10px;font-family:var(--mono);color:var(--ink2);margin-top:0.5rem;line-height:1.6">Your data is saved privately on this device. No accounts, no servers.</div>
+        </div>
+
+        <!-- Export / Import -->
+        <div style="background:var(--bg2);border-radius:10px;padding:1rem;border:1px solid var(--border)">
+          <div style="font-size:7px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink3);font-family:var(--mono);margin-bottom:0.75rem">Your data</div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <button class="btn btn-primary" style="width:100%" onclick="exportData()">⬇ Export my data</button>
+            <button class="btn btn-ghost" style="width:100%" onclick="document.getElementById('import-input').click()">⬆ Import data</button>
+            <input type="file" id="import-input" accept=".json" style="display:none" onchange="importData(event)">
+            <div style="font-size:9px;font-family:var(--mono);color:var(--ink3);line-height:1.6">Export saves your pursuits and log as a JSON file you can back up or transfer to another device.</div>
+          </div>
+        </div>
+
+        <!-- Reset -->
+        <div style="background:var(--bg2);border-radius:10px;padding:1rem;border:1px solid var(--border)">
+          <div style="font-size:7px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink3);font-family:var(--mono);margin-bottom:0.75rem">Reset</div>
+          <button class="btn btn-ghost" style="width:100%;color:#c04040;border-color:#c04040" onclick="resetData()">Reset all data</button>
+        </div>
+
+      </div>
     </div>
 
     <!-- Art mode -->
@@ -718,7 +753,8 @@ function renderSidebar(){
     {id:'month',label:'Month',icon:'📅'},
     {id:'year',label:'Year',icon:'🗓'},
     {id:'garden',label:'Garden',icon:'🌸'},
-    {id:'art',label:'Art mode',icon:'🎨'}
+    {id:'art',label:'Art mode',icon:'🎨'},
+    {id:'more',label:'More',icon:'⚙️'}
   ];
   ['sidebar-nav','drawer-nav'].forEach(function(sid){
     const el=document.getElementById(sid);
@@ -961,7 +997,7 @@ function saveLog(){
   if(logDate){
     if(logSeq.length)log[logDate]=[...logSeq];
     else delete log[logDate];
-    save();
+    scheduleSave();
   }
   closeLog();
   if(currentView==='month')renderMonthView();
@@ -996,7 +1032,7 @@ function addPursuitRow(){
 }
 function saveEditPanel(){
   pursuits.forEach((p,i)=>{const inp=document.getElementById('el-'+i);if(inp)p.label=inp.value.trim()||p.label});
-  save();closeEditPanel();renderSidebar();
+  scheduleSave();closeEditPanel();renderSidebar();
   if(currentView==='month')renderMonthView();
   if(currentView==='year')renderYearView();
 }
@@ -1376,7 +1412,171 @@ function saveGarden(){
   const a=document.createElement('a');a.download='strata-garden.png';a.href=canvas.toDataURL();a.click();
 }
 
+// =======================================================
+// EXPORT / IMPORT / RESET
+// =======================================================
+function exportData(){
+  const data={
+    version:1,
+    exported:new Date().toISOString(),
+    pursuits:pursuits,
+    log:log
+  };
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;
+  a.download='strata-backup-'+new Date().toISOString().slice(0,10)+'.json';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function importData(event){
+  const file=event.target.files[0];
+  if(!file)return;
+  const reader=new FileReader();
+  reader.onload=function(e){
+    try{
+      const data=JSON.parse(e.target.result);
+      if(!data.pursuits||!data.log){
+        alert('Invalid backup file.');return;
+      }
+      if(!confirm('This will replace all your current data. Continue?'))return;
+      pursuits=data.pursuits;
+      log=data.log;
+      scheduleSave();
+      renderSidebar();
+      if(currentView==='month')renderMonthView();
+      if(currentView==='year')renderYearView();
+      alert('Data imported successfully!');
+    }catch(err){
+      alert('Could not read file. Make sure it is a valid Strata backup.');
+    }
+  };
+  reader.readAsText(file);
+  // Reset input so same file can be re-imported
+  event.target.value='';
+}
+
+function resetData(){
+  if(!confirm('Delete all your pursuits and log entries? This cannot be undone.'))return;
+  pursuits=DEFAULT_PURSUITS.map(p=>({...p}));
+  log={};
+  scheduleSave();
+  renderSidebar();
+  if(currentView==='month')renderMonthView();
+  if(currentView==='year')renderYearView();
+  alert('All data cleared.');
+}
+
+// =======================================================
+// FIREBASE SYNC
+// =======================================================
+const firebaseConfig = {
+  apiKey: "AIzaSyCIjoTo5LYXYIEiRD1oGEXlMh6aDvlKoTw",
+  authDomain: "strata-9c44c.firebaseapp.com",
+  projectId: "strata-9c44c",
+  storageBucket: "strata-9c44c.firebasestorage.app",
+  messagingSenderId: "878226094820",
+  appId: "1:878226094820:web:88b4f03bc011995d0fcaf1"
+};
+
+let db=null, fbUser=null, syncTimeout=null, syncStatus='idle';
+
+function initFirebase(){
+  // Retry if firebase SDK not yet loaded
+  if(typeof firebase==='undefined'){
+    setTimeout(initFirebase, 200);
+    return;
+  }
+  try{
+    firebase.initializeApp(firebaseConfig);
+    db=firebase.firestore();
+    firebase.auth().signInAnonymously().then(function(result){
+      fbUser=result.user;
+      console.log('Firebase: signed in as',fbUser.uid);
+      setSyncStatus('connected');
+      loadFromCloud();
+    }).catch(function(err){
+      console.warn('Firebase auth failed:',err.message);
+      setSyncStatus('offline');
+    });
+  }catch(err){
+    console.warn('Firebase init failed:',err.message);
+    setSyncStatus('offline');
+  }
+}
+
+function setSyncStatus(status){
+  syncStatus=status;
+  const el=document.getElementById('sync-status');
+  if(!el)return;
+  const labels={connected:'✓ Synced',syncing:'Syncing...',offline:'Offline',error:'Sync error'};
+  const colors={connected:'#6b8f71',syncing:'#f5c842',offline:'#9c8e7a',error:'#e8452a'};
+  el.textContent=labels[status]||'';
+  el.style.color=colors[status]||'#9c8e7a';
+}
+
+function getUserDoc(){
+  if(!db||!fbUser)return null;
+  return db.collection('users').doc(fbUser.uid);
+}
+
+function loadFromCloud(){
+  const doc=getUserDoc();
+  if(!doc)return;
+  doc.get().then(function(snap){
+    if(snap.exists){
+      const data=snap.data();
+      if(data.pursuits)pursuits=data.pursuits;
+      if(data.log)log=data.log;
+      // Save to localStorage as local cache
+      save();
+      // Re-render
+      renderSidebar();
+      if(currentView==='month')renderMonthView();
+      if(currentView==='year')renderYearView();
+      setSyncStatus('connected');
+      console.log('Firebase: loaded from cloud');
+    } else {
+      // No cloud data yet — push local data up
+      saveToCloud();
+    }
+  }).catch(function(err){
+    console.warn('Firebase load failed:',err.message);
+    setSyncStatus('error');
+  });
+}
+
+function saveToCloud(){
+  const doc=getUserDoc();
+  if(!doc){return}
+  setSyncStatus('syncing');
+  doc.set({
+    pursuits:pursuits,
+    log:log,
+    updated:firebase.firestore.FieldValue.serverTimestamp()
+  }).then(function(){
+    setSyncStatus('connected');
+    console.log('Firebase: saved to cloud');
+  }).catch(function(err){
+    console.warn('Firebase save failed:',err.message);
+    setSyncStatus('error');
+  });
+}
+
+// Debounced save — wait 2s after last change before syncing
+function scheduleSave(){
+  // Always save to localStorage immediately
+  save();
+  // Debounce cloud save
+  if(syncTimeout)clearTimeout(syncTimeout);
+  syncTimeout=setTimeout(saveToCloud, 2000);
+}
+
 function init(){
+  // Init Firebase sync
+  initFirebase();
   // Build onboarding list
   document.getElementById('onboard-list').innerHTML=pursuits.map(p=>`<div class="onboard-pursuit"><div class="onboard-dot" style="background:${p.color}"></div><span style="font-family:var(--mono);font-size:12px;font-weight:500">${p.label}</span></div>`).join('');
   renderSidebar();
@@ -1393,5 +1593,9 @@ function init(){
 }
 init();
 </script>
+<!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
 </body>
 </html>
