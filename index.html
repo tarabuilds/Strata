@@ -38,6 +38,34 @@
   --safe-l:env(safe-area-inset-left,0px);
   --safe-r:env(safe-area-inset-right,0px);
 }
+/* Cosmos theme */
+body.cosmos{
+  --bg:#08081a;
+  --bg2:#10102a;
+  --bg3:#16162e;
+  --ink:#dde6f5;
+  --ink2:#a8bcd4;
+  --ink3:#4a5880;
+  --border:#1e1e38;
+  --border2:#2a2a48;
+  --accent:#5a8fd4;
+  --accent-fg:#08081a;
+}
+body.cosmos .sidebar{background:#06060f;border-right-color:#16162e}
+body.cosmos .sidebar-stripe{background:linear-gradient(to right,#5a8fd4,#7b6fd4,#d46fa8,#d4b03a,#4ab87a,#5a8fd4)}
+body.cosmos .rainbow-bar{background:linear-gradient(to right,#5a8fd4,#7b6fd4,#d46fa8,#d4b03a,#4ab87a,#5a8fd4);opacity:0.8}
+body.cosmos .cal-cell{background:#10102a;border-color:#1e1e38}
+body.cosmos .cal-cell.today{border-color:#4a8fd4;background:#0e1a30}
+body.cosmos .cal-cell.empty{background:transparent;border-color:transparent}
+body.cosmos .mini-cell{background:#10102a}
+body.cosmos .overlay-card{background:#0d0d20;border:1px solid #1e1e38}
+body.cosmos .btn-primary{background:#5a8fd4;color:#08081a}
+body.cosmos .pursuit-log-btn.logged{background:#5a8fd4;color:#08081a;border-color:transparent}
+body.cosmos #art-canvas-wrap{background:#030308}
+body.cosmos .art-toolbar{background:#06060f;border-top-color:#16162e}
+body.cosmos .bg-popover{background:#0d0d20}
+body.cosmos .edit-input{background:#10102a;border-color:#2a2a48;color:#dde6f5}
+body.cosmos #onboarding{background:#08081a}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html{height:100%;height:-webkit-fill-available}
 body{
@@ -379,11 +407,28 @@ body{
 <!-- Onboarding -->
 <div id="onboarding" class="open">
   <div class="onboard-inner">
-    <div class="onboard-title">Strata</div>
-    <div style="font-size:9px;font-family:var(--mono);color:var(--ink3);letter-spacing:0.1em;margin-bottom:0.25rem">v3.0</div>
-    <div class="onboard-sub">Track your daily pursuits.<br>Watch them build into art, layer by layer.</div>
-    <div class="onboard-pursuits" id="onboard-list"></div>
-    <button class="onboard-start" onclick="dismissOnboarding()">Get started →</button>
+    <!-- Step 1: Welcome -->
+    <div id="ob-step-1">
+      <div class="onboard-title">Strata</div>
+      <div class="onboard-sub" style="margin-bottom:1.5rem">Where life becomes art.</div>
+      <p style="font-size:13px;font-family:var(--mono);color:var(--ink2);line-height:1.8;margin-bottom:2rem">Track the things you do every day — moving, creating, connecting, learning, resting. Watch them grow into something beautiful.</p>
+      <div class="onboard-pursuits" id="onboard-list" style="margin-bottom:2rem"></div>
+      <button class="onboard-start" onclick="goToStep(2)">These look good →</button>
+      <button onclick="goToStep(2)" style="width:100%;margin-top:10px;padding:12px;border:none;background:none;font-family:var(--mono);font-size:11px;color:var(--ink3);cursor:pointer;letter-spacing:0.06em">Customise pursuits first</button>
+    </div>
+    <!-- Step 2: Name yourself (optional) -->
+    <div id="ob-step-2" style="display:none">
+      <div class="onboard-title" style="font-size:42px;margin-bottom:0.5rem">Almost there.</div>
+      <p style="font-size:13px;font-family:var(--mono);color:var(--ink2);line-height:1.8;margin-bottom:1.5rem">Your data is saved privately on this device. Sign in to sync across devices — or skip and start tracking.</p>
+      <div style="background:var(--bg2);border-radius:12px;padding:1rem;margin-bottom:1.5rem;border:1px solid var(--border)">
+        <div style="font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink3);font-family:var(--mono);margin-bottom:0.75rem">Optional — sign in to sync</div>
+        <button onclick="signInGoogleOnboard()" style="display:flex;align-items:center;gap:10px;width:100%;padding:10px 14px;border-radius:9px;border:1.5px solid var(--border);background:#fff;cursor:pointer;font-family:var(--mono);font-size:11px;font-weight:500;color:#3c4043;margin-bottom:8px">
+          <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M16.51 8H8.98v3h4.3c-.18 1-.74 1.48-1.6 2.04v2.01h2.6a7.8 7.8 0 002.38-5.88c0-.57-.05-.66-.15-1.18z"/><path fill="#34A853" d="M8.98 17c2.16 0 3.97-.72 5.3-1.94l-2.6-2a4.8 4.8 0 01-7.18-2.54H1.83v2.07A8 8 0 008.98 17z"/><path fill="#FBBC05" d="M4.5 10.52a4.8 4.8 0 010-3.04V5.41H1.83a8 8 0 000 7.18l2.67-2.07z"/><path fill="#EA4335" d="M8.98 4.18c1.17 0 2.23.4 3.06 1.2l2.3-2.3A8 8 0 001.83 5.4L4.5 7.49a4.77 4.77 0 014.48-3.3z"/></svg>
+          Continue with Google
+        </button>
+      </div>
+      <button class="onboard-start" onclick="dismissOnboarding()">Start tracking →</button>
+    </div>
   </div>
 </div>
 
@@ -552,10 +597,22 @@ body{
 
         <!-- About -->
         <div style="background:var(--bg2);border-radius:10px;padding:1rem;border:1px solid var(--border)">
-          <div style="font-size:7px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink3);font-family:var(--mono);margin-bottom:0.5rem">About</div>
+          <div style="font-size:7px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink3);font-family:var(--mono);margin-bottom:0.5rem">About Strata</div>
           <div style="font-family:var(--serif);font-size:18px;font-weight:700;font-style:italic;color:var(--ink)">Strata</div>
-          <div style="font-size:9px;font-family:var(--mono);color:var(--ink3);margin-top:2px">where life becomes art</div>
-          <div style="font-size:10px;font-family:var(--mono);color:var(--ink2);margin-top:0.5rem;line-height:1.6">Your pursuits. Your art. Privately yours.</div>
+          <div style="font-size:9px;font-family:var(--mono);color:var(--ink3);margin-top:2px;margin-bottom:0.75rem">where life becomes art</div>
+          <div style="display:flex;flex-direction:column;gap:0.6rem">
+            <div style="font-size:11px;font-family:var(--mono);color:var(--ink2);line-height:1.7">Strata turns your daily habits into a living artwork. Each pursuit you log becomes a brushstroke — layering up day by day, week by week, into something uniquely yours.</div>
+            <div style="font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink3);font-family:var(--mono);margin-top:0.25rem">What you can do</div>
+            <div style="display:flex;flex-direction:column;gap:5px">
+              <div style="display:flex;gap:8px;font-size:11px;font-family:var(--mono);color:var(--ink2);line-height:1.6"><span style="color:var(--accent);flex-shrink:0">→</span><span><strong>Month view</strong> — tap any day to log your pursuits. Watch flowers bloom as your week fills in.</span></div>
+              <div style="display:flex;gap:8px;font-size:11px;font-family:var(--mono);color:var(--ink2);line-height:1.6"><span style="color:var(--accent);flex-shrink:0">→</span><span><strong>Year view</strong> — see your whole year at a glance. A garden of small moments.</span></div>
+              <div style="display:flex;gap:8px;font-size:11px;font-family:var(--mono);color:var(--ink2);line-height:1.6"><span style="color:var(--accent);flex-shrink:0">→</span><span><strong>Garden</strong> — your week's blooms gathered into a bouquet. Save it as a keepsake.</span></div>
+              <div style="display:flex;gap:8px;font-size:11px;font-family:var(--mono);color:var(--ink2);line-height:1.6"><span style="color:var(--accent);flex-shrink:0">→</span><span><strong>Art mode</strong> — your data reimagined as abstract art. Spiral, radiate, flow. Save as PNG.</span></div>
+              <div style="display:flex;gap:8px;font-size:11px;font-family:var(--mono);color:var(--ink2);line-height:1.6"><span style="color:var(--accent);flex-shrink:0">→</span><span><strong>Pursuits</strong> — customise what you track, choose colours, pick a painting style.</span></div>
+              <div style="display:flex;gap:8px;font-size:11px;font-family:var(--mono);color:var(--ink2);line-height:1.6"><span style="color:var(--accent);flex-shrink:0">→</span><span><strong>make it you</strong> — tap any colour dot to change the app's accent colour.</span></div>
+            </div>
+            <div style="font-size:10px;font-family:var(--mono);color:var(--ink3);line-height:1.6;margin-top:0.25rem;padding-top:0.75rem;border-top:1px solid var(--border)">Your data lives on your device. Sign in with Google to sync across devices. Export anytime as a backup.</div>
+          </div>
         </div>
 
         <!-- Export / Import -->
@@ -566,6 +623,21 @@ body{
             <button class="btn btn-ghost" style="width:100%" onclick="document.getElementById('import-input').click()">⬆ Import data</button>
             <input type="file" id="import-input" accept=".json" style="display:none" onchange="importData(event)">
             <div style="font-size:9px;font-family:var(--mono);color:var(--ink3);line-height:1.6">Export saves your pursuits and log as a JSON file you can back up or transfer to another device.</div>
+          </div>
+        </div>
+
+        <!-- Theme -->
+        <div style="background:var(--bg2);border-radius:10px;padding:1rem;border:1px solid var(--border)">
+          <div style="font-size:7px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink3);font-family:var(--mono);margin-bottom:0.75rem">Theme</div>
+          <div style="display:flex;gap:8px">
+            <button id="theme-strata" onclick="setTheme('strata')" style="flex:1;padding:12px 8px;border-radius:9px;border:1.5px solid var(--border);background:var(--bg);cursor:pointer;font-family:var(--mono);font-size:10px;color:var(--ink2);display:flex;flex-direction:column;align-items:center;gap:5px">
+              <div style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#f5c842,#3AB87A,#AFA9EC)"></div>
+              <span>Strata</span>
+            </button>
+            <button id="theme-cosmos" onclick="setTheme('cosmos')" style="flex:1;padding:12px 8px;border-radius:9px;border:1.5px solid var(--border);background:var(--bg);cursor:pointer;font-family:var(--mono);font-size:10px;color:var(--ink2);display:flex;flex-direction:column;align-items:center;gap:5px">
+              <div style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#08081a,#5a8fd4,#7b6fd4)"></div>
+              <span>Cosmos</span>
+            </button>
           </div>
         </div>
 
@@ -862,7 +934,7 @@ function closeDrawer(){
 }
 function toggleFilter(tid){filterPursuit=filterPursuit===tid?null:tid;renderMonthView()}
 function setAccentColor(c){accentColor=c;localStorage.setItem('sp_accent',c);renderSidebar();renderMonthView()}
-function setStyle(s){currentStyle=s;localStorage.setItem('sp_style',s);document.querySelectorAll('[data-style]').forEach(b=>b.classList.toggle('active',b.dataset.style===s));if(currentView==='month')renderMonthView();if(currentView==='art')redrawArt()}
+function setStyle(s){currentStyle=s;localStorage.setItem('sp_style',s);document.querySelectorAll('[data-style]').forEach(b=>b.classList.toggle('active',b.dataset.style===s));if(currentView==='month')renderMonthView();if(currentView==='art')redrawArt();if(currentView==='garden')renderGarden();}
 
 // =======================================================
 // FLOWER SVG RENDERER
@@ -963,7 +1035,8 @@ function renderMonthView(){
     const petalsSeen=new Set();const uniquePetals=[];
     pursuits.forEach(p=>{if(entries.some(tid=>(typeof tid==='string'?tid:tid.tid)===p.id)&&!petalsSeen.has(p.id)){petalsSeen.add(p.id);uniquePetals.push(p.color)}});
     const daySeed=viewYear*10000+viewMonth*100+d;
-    html+=`<div class="cal-cell${isToday?' today':''}" onclick="openLog('${iso}')"><span class="day-num">${d}</span>${uniquePetals.length?flowerSVG(uniquePetals,20,daySeed):''}</div>`;
+    const marker=uniquePetals.length?(currentTheme==='cosmos'?cometSVG(uniquePetals,20,daySeed):flowerSVG(uniquePetals,20,daySeed)):'';
+    html+=`<div class="cal-cell${isToday?' today':''}${uniquePetals.length?' logged':''}" onclick="openLog('${iso}')"><span class="day-num">${d}</span>${marker}</div>`;
   }
   document.getElementById('cal-grid').innerHTML=html;
 }
@@ -987,7 +1060,8 @@ function renderYearView(){
       const petalsSeen=new Set();const up=[];
       if(hasLog)pursuits.forEach(p=>{if((log[iso]||[]).some(tid=>(typeof tid==='string'?tid:tid.tid)===p.id)&&!petalsSeen.has(p.id)){petalsSeen.add(p.id);up.push(p.color)}});
       const seed=viewYearPage*10000+m*100+d;
-      html+=`<div class="mini-cell${isT?' today-mini':''}">${up.length?flowerSVG(up,14,seed):''}</div>`;
+      const miniMarker=up.length?(currentTheme==='cosmos'?cometSVG(up,14,seed):flowerSVG(up,14,seed)):'';
+      html+=`<div class="mini-cell${isT?' today-mini':''}">${miniMarker}</div>`;
     }
     html+=`</div></div>`;
   }
@@ -1040,19 +1114,26 @@ function openEditPanel(){
   document.getElementById('edit-panel').classList.add('open');
 }
 function closeEditPanel(){document.getElementById('edit-panel').classList.remove('open')}
+function flushEditInputs(){
+  // Save current input values back to pursuits before re-rendering
+  pursuits.forEach(function(p,i){
+    const inp=document.getElementById('el-'+i);
+    if(inp&&inp.value.trim())p.label=inp.value.trim();
+  });
+}
 function renderEditList(){
   document.getElementById('edit-list').innerHTML=pursuits.map(function(p,i){
     const swatches=PALETTE.map(function(col){
       const outline=col===p.color?'2.5px solid '+col:'1px solid transparent';
-      return '<div class="sp" data-pidx="'+i+'" data-col="'+col+'" style="background:'+col+';outline:'+outline+';outline-offset:1.5px"></div>';
+      return '<div class="sp" data-pidx="'+i+'" data-col="'+col+'" style="background:'+col+';outline:'+outline+';outline-offset:1.5px;cursor:pointer"></div>';
     }).join('');
     return '<div class="edit-row" id="er-'+i+'"><input class="edit-input" id="el-'+i+'" value="'+p.label.replace(/"/g,'&quot;')+'" placeholder="Pursuit name"><button class="remove-btn" data-ri="'+i+'">×</button></div><div class="swatch-pick" id="esp-'+i+'">'+swatches+'</div>';
   }).join('');
   document.querySelectorAll('.sp').forEach(function(d){d.onclick=function(){pickSwatch(+d.dataset.pidx,d.dataset.col)}});
   document.querySelectorAll('.remove-btn').forEach(function(b){b.onclick=function(){removePursuit(+b.dataset.ri)}});
 }
-function pickSwatch(i,c){pursuits[i].color=c;renderEditList()}
-function removePursuit(i){pursuits.splice(i,1);renderEditList()}
+function pickSwatch(i,col){flushEditInputs();pursuits[i].color=col;renderEditList()}
+function removePursuit(i){flushEditInputs();pursuits.splice(i,1);renderEditList()}
 function addPursuitRow(){
   pursuits.push({id:'p'+Date.now(),label:'New pursuit',color:PALETTE[pursuits.length%PALETTE.length]});
   renderEditList();
@@ -1120,11 +1201,31 @@ function paintMark(ctx,cx,cy,W,H,color,rng,intensity){
     const ang=(rng()-0.5)*Math.PI*2;
     ctx.translate(cx,cy);ctx.rotate(ang);
     const bend=(rng()-0.5)*w*0.55,bend2=(rng()-0.5)*w*0.45;
+    // Shadow base
     ctx.beginPath();ctx.moveTo(bend,-len/2);ctx.bezierCurveTo(bend,-len*0.18,bend2,len*0.18,bend2,len/2);
     ctx.strokeStyle=withAlpha(varyColor(rng,color,0.04),0.35);ctx.lineWidth=w*1.05;ctx.lineCap='round';ctx.stroke();
+    // Main body
     ctx.strokeStyle=withAlpha(varyColor(rng,color,0.04),0.92);ctx.lineWidth=w;ctx.stroke();
+    // Bristle highlights — 8-14 thin white lines along stroke
+    const nB=8+Math.round(rng()*6);
+    for(let b=0;b<nB;b++){
+      const bx=(rng()-0.5)*w*0.75;
+      const bStart=-len*(0.38+rng()*0.10);
+      const bEnd=bStart+len*(0.22+rng()*0.40);
+      ctx.beginPath();ctx.moveTo(bx,bStart);ctx.lineTo(bx+(rng()-0.5)*w*0.08,bEnd);
+      ctx.strokeStyle='rgba(255,255,255,'+(0.12+rng()*0.38).toFixed(2)+')';
+      ctx.lineWidth=0.4+rng()*1.2;ctx.lineCap='round';ctx.stroke();
+    }
+    // Dark bristle shadows on one edge
+    for(let b=0;b<4;b++){
+      const bx=-w*0.36+rng()*w*0.12;
+      ctx.beginPath();ctx.moveTo(bx,-len*(0.28+rng()*0.08));ctx.lineTo(bx+(rng()-0.5)*w*0.06,len*(0.28+rng()*0.08));
+      ctx.strokeStyle='rgba(0,0,0,'+(0.08+rng()*0.12).toFixed(2)+')';
+      ctx.lineWidth=0.5+rng()*0.9;ctx.stroke();
+    }
+    // Central impasto ridge
     ctx.beginPath();ctx.moveTo(bend*0.3+w*0.08,-len*0.40);ctx.lineTo(bend2*0.3-w*0.04,len*0.40);
-    ctx.strokeStyle='rgba(255,255,255,0.50)';ctx.lineWidth=w*0.12;ctx.stroke();
+    ctx.strokeStyle='rgba(255,255,255,0.55)';ctx.lineWidth=w*0.10;ctx.stroke();
   } else if(style==='impressionist'){
     const ns=3+Math.round(rng()*3);
     for(let d=0;d<ns;d++){
@@ -1136,6 +1237,16 @@ function paintMark(ctx,cx,cy,W,H,color,rng,intensity){
       for(let t=0;t<=8;t++){const tt=t/8,wt=sw*Math.sin(tt*Math.PI)*(0.7+rng()*0.3);const py=-sl/2+sl*tt;if(t===0){ctx.moveTo(-wt/2,py)}else{ctx.lineTo(-wt/2,py)}}
       for(let t=8;t>=0;t--){const tt=t/8,wt=sw*Math.sin(tt*Math.PI)*(0.7+rng()*0.3);ctx.lineTo(wt/2,-sl/2+sl*tt);}
       ctx.closePath();ctx.fillStyle=withAlpha(varyColor(rng,color,0.12),(0.50+rng()*0.30)*intensity);ctx.fill();
+      // Lighter scattered bristles — acrylic feel
+      const nB=4+Math.round(rng()*4);
+      for(let b=0;b<nB;b++){
+        const bx=(rng()-0.5)*sw*0.65;
+        const bStart=-sl*(0.30+rng()*0.12);
+        const bEnd=bStart+sl*(0.18+rng()*0.35);
+        ctx.beginPath();ctx.moveTo(bx,bStart);ctx.lineTo(bx+(rng()-0.5)*sw*0.15,bEnd);
+        ctx.strokeStyle='rgba(255,255,255,'+(0.08+rng()*0.22).toFixed(2)+')';
+        ctx.lineWidth=0.3+rng()*0.8;ctx.lineCap='round';ctx.stroke();
+      }
       ctx.restore();
     }
   } else if(style==='pointillist'){
@@ -1160,7 +1271,7 @@ function paintMark(ctx,cx,cy,W,H,color,rng,intensity){
       ctx.fillStyle=withAlpha(varyColor(rng,color,0.08),op*intensity);ctx.fill();
     });
   } else {
-    // inkwash
+    // inkwash — saturated, tapered, flying white hairlines
     const len=H*(0.62+rng()*0.28),w=Math.max(3,W*0.30*(0.85+rng()*0.25));
     const ang=(rng()-0.5)*Math.PI*2;
     ctx.translate(cx,cy);ctx.rotate(ang);
@@ -1170,7 +1281,22 @@ function paintMark(ctx,cx,cy,W,H,color,rng,intensity){
     for(let t=0;t<=ns;t++){const tt=t/ns,py=-len/2+len*tt,wt=w*Math.sin(tt*Math.PI)*(0.85+rng()*0.3),px=(rng()-0.5)*wt*0.15;t===0?ctx.moveTo(px-wt/2,py):ctx.lineTo(px-wt/2,py)}
     for(let t=ns;t>=0;t--){const tt=t/ns,py=-len/2+len*tt,wt=w*Math.sin(tt*Math.PI)*(0.85+rng()*0.3),px=(rng()-0.5)*wt*0.15;ctx.lineTo(px+wt/2,py)}
     ctx.closePath();ctx.fillStyle=withAlpha(sc,0.88+intensity*0.10);ctx.fill();
-    for(let h=0;h<3;h++){ctx.beginPath();ctx.moveTo((rng()-0.5)*w*0.3,-len*0.4-rng()*len*0.1);ctx.lineTo((rng()-0.5)*w*0.5,-len*0.52);ctx.strokeStyle='rgba(255,255,255,0.30)';ctx.lineWidth=0.5+rng()*0.7;ctx.lineCap='round';ctx.stroke()}
+    // Flying white hairlines at tips
+    for(let h=0;h<5;h++){
+      ctx.beginPath();
+      ctx.moveTo((rng()-0.5)*w*0.35,-len*0.38-rng()*len*0.12);
+      ctx.lineTo((rng()-0.5)*w*0.55,-len*(0.48+rng()*0.08));
+      ctx.strokeStyle='rgba(255,255,255,'+(0.22+rng()*0.28).toFixed(2)+')';
+      ctx.lineWidth=0.4+rng()*0.8;ctx.lineCap='round';ctx.stroke();
+    }
+    // A few dark texture lines suggesting ink pooling
+    for(let h=0;h<2;h++){
+      ctx.beginPath();
+      ctx.moveTo(-w*(0.32+rng()*0.08),-len*(0.2+rng()*0.1));
+      ctx.lineTo(-w*(0.28+rng()*0.06),len*(0.2+rng()*0.1));
+      ctx.strokeStyle='rgba(0,0,0,'+(0.10+rng()*0.10).toFixed(2)+')';
+      ctx.lineWidth=0.5+rng()*0.6;ctx.stroke();
+    }
   }
   ctx.restore();
 }
@@ -1189,13 +1315,12 @@ function shapePoint(comp,rng){
   }
 }
 
-let W=0,H=0;
 function redrawArt(){
   const canvas=document.getElementById('art-canvas');
   const wrap=document.getElementById('art-canvas-wrap');
   if(!canvas||!wrap)return;
   const dpr=window.devicePixelRatio||1;
-  W=wrap.clientWidth;H=wrap.clientHeight;
+  const W=wrap.clientWidth,H=wrap.clientHeight;
   if(W<10||H<10)return;
   canvas.width=W*dpr;canvas.height=H*dpr;
   canvas.style.width=W+'px';canvas.style.height=H+'px';
@@ -1206,7 +1331,7 @@ function redrawArt(){
   const entries=getArtEntries();
   const total=entries.length;
   if(!total){document.getElementById('art-hint').textContent='No entries';return}
-  document.getElementById('art-hint').textContent=`${total} marks · ${currentStyle}`;
+  document.getElementById('art-hint').textContent=total+' marks · '+currentStyle;
   const intensity=parseFloat(document.getElementById('art-opacity').value||0.7);
   const scale=parseFloat(document.getElementById('art-size').value||1);
   const markW=Math.min(W,H)*0.09*scale;
@@ -1259,6 +1384,19 @@ function saveArt(){
 // =======================================================
 // ONBOARDING
 // =======================================================
+function goToStep(n){
+  document.getElementById('ob-step-1').style.display=n===1?'block':'none';
+  document.getElementById('ob-step-2').style.display=n===2?'block':'none';
+}
+function signInGoogleOnboard(){
+  if(typeof firebase==='undefined')return;
+  const provider=new firebase.auth.GoogleAuthProvider();
+  firebase.auth().signInWithPopup(provider).then(function(result){
+    fbUser=result.user;loadFromCloud();updateAuthUI();dismissOnboarding();
+  }).catch(function(err){
+    dismissOnboarding(); // skip if fails
+  });
+}
 function dismissOnboarding(){document.getElementById('onboarding').classList.remove('open');showView('month')}
 
 // =======================================================
@@ -1375,36 +1513,63 @@ function renderGarden(){
     ctx.beginPath();ctx.ellipse(leafLen/2,0,leafLen/2,leafLen*0.20,0,0,Math.PI*2);
     ctx.fillStyle='rgba(100,145,65,0.42)';ctx.fill();ctx.restore();
 
-    // Flower petals drawn directly
+    // Draw petals with current painting style
     const sz=20+petals.length*5;
-    const iso_seed2=iso_seed;
     const outerRBase=sz*0.42*(petals.length<=5?1:petals.length<=8?0.88:0.72);
-    const maxSpr=Math.min(0.38,(Math.PI*0.72)/petals.length);
-
-    petals.forEach((color,pi)=>{
+    const maxSprG=Math.min(0.38,(Math.PI*0.72)/petals.length);
+    petals.forEach(function(color,pi){
       const a=(pi/petals.length)*Math.PI*2-Math.PI/2;
-      const outerR=outerRBase*(0.90+rngFlower(iso_seed2,pi)*0.18);
-      const tipA=a+(rngFlower(iso_seed2,pi+50)-0.5)*0.12;
+      const outerR=outerRBase*(0.90+rngFlower(iso_seed,pi)*0.18);
+      const tipA=a+(rngFlower(iso_seed,pi+50)-0.5)*0.12;
       const tipX2=flowerX+Math.cos(tipA)*outerR;
       const tipY2=flowerY+Math.sin(tipA)*outerR;
       const perpA=a+Math.PI/2;
-      const bend=(rngFlower(iso_seed2,pi+81)-0.5)*outerR*0.28;
+      const bend=(rngFlower(iso_seed,pi+81)-0.5)*outerR*0.28;
       const midX2=flowerX+Math.cos(a)*outerR*0.5+Math.cos(perpA)*bend;
       const midY2=flowerY+Math.sin(a)*outerR*0.5+Math.sin(perpA)*bend;
-      const sw=outerR*(0.28+rngFlower(iso_seed2,pi+82)*0.08);
-      // Shadow stroke
-      ctx.beginPath();ctx.moveTo(flowerX,flowerY);
-      ctx.quadraticCurveTo(midX2,midY2,tipX2,tipY2);
-      ctx.strokeStyle=withAlpha(color,0.30);ctx.lineWidth=sw*1.2;ctx.lineCap='round';ctx.stroke();
-      // Main stroke
-      ctx.beginPath();ctx.moveTo(flowerX,flowerY);
-      ctx.quadraticCurveTo(midX2,midY2,tipX2,tipY2);
-      ctx.strokeStyle=withAlpha(color,0.92);ctx.lineWidth=sw;ctx.stroke();
-      // Highlight
-      const hlMx=midX2+Math.cos(perpA)*sw*0.1,hlMy=midY2+Math.sin(perpA)*sw*0.1;
-      ctx.beginPath();ctx.moveTo(flowerX+Math.cos(perpA)*sw*0.1,flowerY+Math.sin(perpA)*sw*0.1);
-      ctx.quadraticCurveTo(hlMx,hlMy,tipX2+Math.cos(perpA)*sw*0.06,tipY2+Math.sin(perpA)*sw*0.06);
-      ctx.strokeStyle='rgba(255,255,255,0.40)';ctx.lineWidth=sw*0.15;ctx.stroke();
+      const sw=outerR*(0.28+rngFlower(iso_seed,pi+82)*0.08);
+      ctx.lineCap='round';
+      if(currentStyle==='watercolour'){
+        [[1.18,0.10],[1.0,0.18],[0.82,0.28],[0.64,0.40]].forEach(function(lr){
+          ctx.beginPath();ctx.moveTo(flowerX,flowerY);
+          ctx.quadraticCurveTo(midX2*lr[0]+flowerX*(1-lr[0]),midY2*lr[0]+flowerY*(1-lr[0]),tipX2*lr[0]+flowerX*(1-lr[0]),tipY2*lr[0]+flowerY*(1-lr[0]));
+          ctx.strokeStyle=withAlpha(color,lr[1]);ctx.lineWidth=sw*(1+lr[0]*0.3);ctx.stroke();
+        });
+      } else if(currentStyle==='inkwash'){
+        ctx.beginPath();ctx.moveTo(flowerX,flowerY);ctx.quadraticCurveTo(midX2,midY2,tipX2,tipY2);
+        ctx.strokeStyle=withAlpha(saturateHex(color,1.6),0.93);ctx.lineWidth=sw*0.85;ctx.stroke();
+      } else if(currentStyle==='impressionist'){
+        for(let d=0;d<5;d++){
+          const dA=a+(rngFlower(iso_seed,pi*20+d)-0.5)*maxSprG*1.5;
+          const dist=outerR*(0.3+d*0.15);
+          const dx=flowerX+Math.cos(dA)*dist,dy=flowerY+Math.sin(dA)*dist;
+          const dlen=outerR*(0.18+rngFlower(iso_seed,pi*20+d+5)*0.10);
+          const dAng=dA+Math.PI/2-0.8+(rngFlower(iso_seed,pi*20+d+10)-0.5)*0.4;
+          ctx.beginPath();ctx.moveTo(dx-Math.cos(dAng)*dlen/2,dy-Math.sin(dAng)*dlen/2);
+          ctx.lineTo(dx+Math.cos(dAng)*dlen/2,dy+Math.sin(dAng)*dlen/2);
+          ctx.strokeStyle=withAlpha(color,0.55+rngFlower(iso_seed,pi*20+d+15)*0.35);
+          ctx.lineWidth=sw*0.55;ctx.stroke();
+        }
+      } else if(currentStyle==='pointillist'){
+        [[1,0,1.0],[3,0.55,0.78],[4,1.05,0.56]].forEach(function(ring){
+          for(let d=0;d<ring[0];d++){
+            const t2=ring[0]===1?0:(d/ring[0])*Math.PI*2+rngFlower(iso_seed,pi*30+d)*0.3;
+            const dx=flowerX+Math.cos(a)*outerR*0.52+Math.cos(t2)*outerR*ring[1]*0.3;
+            const dy=flowerY+Math.sin(a)*outerR*0.52+Math.sin(t2)*outerR*ring[1]*0.3;
+            ctx.beginPath();ctx.arc(dx,dy,Math.max(0.8,outerR*ring[2]*0.22*(0.7+rngFlower(iso_seed,pi*30+d+5)*0.5)),0,Math.PI*2);
+            ctx.fillStyle=withAlpha(color,0.72+rngFlower(iso_seed,pi*30+d+10)*0.22);ctx.fill();
+          }
+        });
+      } else {
+        ctx.beginPath();ctx.moveTo(flowerX,flowerY);ctx.quadraticCurveTo(midX2,midY2,tipX2,tipY2);
+        ctx.strokeStyle=withAlpha(color,0.30);ctx.lineWidth=sw*1.2;ctx.stroke();
+        ctx.beginPath();ctx.moveTo(flowerX,flowerY);ctx.quadraticCurveTo(midX2,midY2,tipX2,tipY2);
+        ctx.strokeStyle=withAlpha(color,0.92);ctx.lineWidth=sw;ctx.stroke();
+        const hlMx=midX2+Math.cos(perpA)*sw*0.1,hlMy=midY2+Math.sin(perpA)*sw*0.1;
+        ctx.beginPath();ctx.moveTo(flowerX+Math.cos(perpA)*sw*0.1,flowerY+Math.sin(perpA)*sw*0.1);
+        ctx.quadraticCurveTo(hlMx,hlMy,tipX2+Math.cos(perpA)*sw*0.06,tipY2+Math.sin(perpA)*sw*0.06);
+        ctx.strokeStyle='rgba(255,255,255,0.40)';ctx.lineWidth=sw*0.15;ctx.stroke();
+      }
     });
   });
 
@@ -1442,6 +1607,54 @@ function saveGarden(){
 // =======================================================
 // EXPORT / IMPORT / RESET
 // =======================================================
+// =======================================================
+// THEME
+// =======================================================
+let currentTheme=localStorage.getItem('sp_theme')||'strata';
+
+function setTheme(t){
+  currentTheme=t;
+  localStorage.setItem('sp_theme',t);
+  document.body.classList.toggle('cosmos',t==='cosmos');
+  // Update theme button active states
+  const sb=document.getElementById('theme-strata');
+  const cb=document.getElementById('theme-cosmos');
+  if(sb)sb.style.borderColor=t==='strata'?'var(--accent)':'var(--border)';
+  if(cb)cb.style.borderColor=t==='cosmos'?'var(--accent)':'var(--border)';
+  // Re-render everything
+  renderSidebar();
+  if(currentView==='month')renderMonthView();
+  if(currentView==='year')renderYearView();
+  // Switch art bg to match theme if using default
+  const defaultBgs=['#faf8f4','#030308'];
+  if(defaultBgs.includes(artBg)){artBg=t==='cosmos'?'#030308':'#faf8f4';localStorage.setItem('sp_artbg',artBg);}
+  if(currentView==='art')redrawArt();
+  if(currentView==='garden')renderGarden();
+}
+
+// Comet SVG for cosmos theme
+function cometSVG(colors,s,seed){
+  if(!colors||!colors.length)return'';
+  s=s||20;const n=colors.length,cx=s/2,cy=s/2;
+  let svg=`<svg viewBox="0 0 ${s} ${s}" style="width:86%;height:86%">`;
+  for(let i=0;i<n;i++){
+    const a=(i/n)*Math.PI*2-Math.PI/2;
+    const c=colors[i%n];
+    const headDist=s*0.15;
+    const tailDist=s*0.43;
+    const hx=cx+Math.cos(a)*headDist,hy=cy+Math.sin(a)*headDist;
+    const tx=cx+Math.cos(a)*tailDist,ty=cy+Math.sin(a)*tailDist;
+    const perpA=a+Math.PI/2;
+    const w1=s*0.068;
+    svg+=`<path d="M ${(hx+Math.cos(perpA)*w1).toFixed(1)},${(hy+Math.sin(perpA)*w1).toFixed(1)} L ${tx.toFixed(1)},${ty.toFixed(1)} L ${(hx-Math.cos(perpA)*w1).toFixed(1)},${(hy-Math.sin(perpA)*w1).toFixed(1)} Z" fill="${c}" opacity="0.50"/>`;
+    svg+=`<circle cx="${hx.toFixed(1)}" cy="${hy.toFixed(1)}" r="${(s*0.075).toFixed(1)}" fill="${c}" opacity="0.95"/>`;
+  }
+  svg+=`<circle cx="${cx}" cy="${cy}" r="${(s*0.082).toFixed(1)}" fill="#ffffff" opacity="0.90"/>`;
+  svg+=`<circle cx="${cx}" cy="${cy}" r="${(s*0.042).toFixed(1)}" fill="#ffffff" opacity="0.70"/>`;
+  svg+='</svg>';
+  return svg;
+}
+
 function exportData(){
   const data={
     version:1,
@@ -1721,6 +1934,11 @@ function init(){
   // Auto-dismiss onboarding if returning user
   if(localStorage.getItem('sp_seen')){dismissOnboarding()}
   else{localStorage.setItem('sp_seen','1')}
+  // Apply saved theme — also set default artBg if not saved
+  if(!localStorage.getItem('sp_artbg')){
+    artBg=currentTheme==='cosmos'?'#030308':'#faf8f4';
+  }
+  setTheme(currentTheme);
   // Resize handler for art canvas
   window.addEventListener('resize',()=>{if(currentView==='art')redrawArt();if(currentView==='garden')renderGarden()});
 }
