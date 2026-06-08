@@ -1046,15 +1046,13 @@ function renderMonthView(){
     const iso=isoDate(viewYear,viewMonth,d);
     const entries=log[iso]||[];
     const isToday=iso===todayStr;
-    const seen=new Set();const petals=[];
-    pursuits.forEach(p=>{
-      entries.forEach(tid=>{
-        if(getTid(tid)===p.id)petals.push(p.color);
-      });
+    // One petal per logged instance (repeats included)
+    const uniquePetals=[];
+    entries.forEach(function(tid){
+      const id=getTid(tid);
+      const p=pursuits.find(x=>x.id===id);
+      if(p)uniquePetals.push(p.color);
     });
-    // dedupe for flower (one petal per pursuit type)
-    const petalsSeen=new Set();const uniquePetals=[];
-    pursuits.forEach(p=>{if(entries.some(tid=>getTid(tid)===p.id)&&!petalsSeen.has(p.id)){petalsSeen.add(p.id);uniquePetals.push(p.color)}});
     const daySeed=viewYear*10000+viewMonth*100+d;
     let marker='';
     if(uniquePetals.length){
@@ -1082,8 +1080,8 @@ function renderYearView(){
       const iso=isoDate(viewYearPage,m,d);
       const hasLog=(log[iso]||[]).length>0;
       const isT=iso===todayStr;
-      const petalsSeen=new Set();const up=[];
-      if(hasLog)pursuits.forEach(p=>{if((log[iso]||[]).some(tid=>getTid(tid)===p.id)&&!petalsSeen.has(p.id)){petalsSeen.add(p.id);up.push(p.color)}});
+      const up=[];
+      if(hasLog)(log[iso]||[]).forEach(function(tid){const id=getTid(tid);const p=pursuits.find(x=>x.id===id);if(p)up.push(p.color)});
       const seed=viewYearPage*10000+m*100+d;
       const miniMarker=up.length?(currentTheme==='cosmos'?cometSVG(up,14,seed):flowerSVG(up,14,seed)):'';
       html+=`<div class="mini-cell${isT?' today-mini':''}">${miniMarker}</div>`;
@@ -1549,9 +1547,12 @@ function renderGarden(){
   // Build flower data first (so we can draw back-to-front, biggest/centre last)
   const flowers=activeDays.map(function(day,i){
     const entries=log[day.iso]||[];
-    const seen=new Set();const petals=[];
-    pursuits.forEach(p=>{
-      if(entries.some(tid=>getTid(tid)===p.id)&&!seen.has(p.id)){seen.add(p.id);petals.push(p.color);}
+    // One petal per logged instance (repeats included)
+    const petals=[];
+    entries.forEach(function(tid){
+      const id=getTid(tid);
+      const p=pursuits.find(x=>x.id===id);
+      if(p)petals.push(p.color);
     });
     const iso_seed=day.iso.split('').reduce((a,ch,si)=>a+ch.charCodeAt(0)*(si+1),0);
     // Phyllotaxis position
@@ -1576,9 +1577,8 @@ function renderGarden(){
 
   // Stats
   const totalBlooms=activeDays.reduce((a,d)=>{
-    const e=log[d.iso]||[];const s2=new Set();
-    pursuits.forEach(p=>{if(e.some(tid=>getTid(tid)===p.id))s2.add(p.id)});
-    return a+s2.size;
+    const e=log[d.iso]||[];
+    return a+e.filter(tid=>getTid(tid)!=null).length;
   },0);
   const gLabel=isCosmos?'stars':'blooms';
   document.getElementById('garden-stat').textContent=totalBlooms+' '+gLabel+' - '+activeDays.length+' days';
