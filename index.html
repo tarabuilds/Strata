@@ -1507,17 +1507,19 @@ function renderGarden(){
 
   // Background
   if(isCosmos){
-    ctx.fillStyle='#030308';ctx.fillRect(0,0,W,H);
-    for(let s=0;s<60;s++){
+    const g=ctx.createRadialGradient(W/2,H*0.45,0,W/2,H*0.45,Math.max(W,H)*0.7);
+    g.addColorStop(0,'#0e1330');g.addColorStop(0.6,'#070a1e');g.addColorStop(1,'#03030c');
+    ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+    for(let s=0;s<70;s++){
       const sx=rngFlower(s*99,1)*W,sy=rngFlower(s*99,2)*H;
-      const sr=0.3+rngFlower(s*99,3)*0.7;
+      const sr=0.3+rngFlower(s*99,3)*0.8;
       ctx.beginPath();ctx.arc(sx,sy,sr,0,Math.PI*2);
-      ctx.fillStyle='rgba(200,215,255,'+(0.15+rngFlower(s*99,4)*0.45).toFixed(2)+')';ctx.fill();
+      ctx.fillStyle='rgba(200,215,255,'+(0.12+rngFlower(s*99,4)*0.45).toFixed(2)+')';ctx.fill();
     }
   } else {
-    const grad=ctx.createLinearGradient(0,0,0,H);
-    grad.addColorStop(0,'#f5f0e8');grad.addColorStop(1,'#e8e0cc');
-    ctx.fillStyle=grad;ctx.fillRect(0,0,W,H);
+    const g=ctx.createLinearGradient(0,0,0,H);
+    g.addColorStop(0,'#f7f2ea');g.addColorStop(1,'#ece4d4');
+    ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
   }
 
   const days=getGardenDays();
@@ -1531,129 +1533,48 @@ function renderGarden(){
   }
 
   const n=activeDays.length;
-  const handX=W/2, handY=H*0.95;
-  const maxSpreadDeg=Math.min(50, 10+n*5);
-  const startAngleDeg=-90-maxSpreadDeg/2;
+  const cx=W/2, cy=H*0.46;
 
-  activeDays.forEach(function(day,i){
+  // Flower size scales DOWN as count grows — bigger when sparse, smaller when full
+  // Base size large, shrinks with sqrt of count
+  const sizeScale=Math.max(0.42, Math.min(1.3, 2.6/Math.sqrt(n+1)));
+
+  // Cluster radius — how far flowers spread from centre. Grows with count but slowly.
+  const clusterR=Math.min(W,H)*0.30*Math.min(1.5, Math.sqrt(n)/2.2);
+
+  // Position flowers in a bunched cluster using a sunflower/phyllotaxis spiral
+  // so they pack naturally and overlap slightly
+  const golden=Math.PI*(3-Math.sqrt(5));
+
+  // Build flower data first (so we can draw back-to-front, biggest/centre last)
+  const flowers=activeDays.map(function(day,i){
     const entries=log[day.iso]||[];
     const seen=new Set();const petals=[];
     pursuits.forEach(p=>{
-      if(entries.some(tid=>getTid(tid)===p.id)&&!seen.has(p.id)){
-        seen.add(p.id);petals.push(p.color);
-      }
+      if(entries.some(tid=>getTid(tid)===p.id)&&!seen.has(p.id)){seen.add(p.id);petals.push(p.color);}
     });
-    if(!petals.length)return;
-
-    const angleDeg=n===1?-90:startAngleDeg+(i/(n-1))*maxSpreadDeg;
-    const angleRad=angleDeg*Math.PI/180;
-    const midness=n===1?1:1-Math.abs((i-(n-1)/2)/((n-1)/2));
     const iso_seed=day.iso.split('').reduce((a,ch,si)=>a+ch.charCodeAt(0)*(si+1),0);
-    const stemLen=H*(0.36+midness*0.10)+rngFlower(iso_seed,99)*H*0.03;
-    const flowerX=handX+Math.cos(angleRad)*stemLen;
-    const flowerY=handY+Math.sin(angleRad)*stemLen;
-    const side=i%2?1:-1;
-    const cpX=handX+Math.cos(angleRad)*stemLen*0.5+Math.cos(angleRad+Math.PI/2)*stemLen*0.06*side;
-    const cpY=handY+Math.sin(angleRad)*stemLen*0.5+Math.sin(angleRad+Math.PI/2)*stemLen*0.06*side;
+    // Phyllotaxis position
+    const idx=i;
+    const r=clusterR*Math.sqrt(idx/Math.max(n,1));
+    const theta=idx*golden;
+    const jx=(rngFlower(iso_seed,300)-0.5)*clusterR*0.12;
+    const jy=(rngFlower(iso_seed,301)-0.5)*clusterR*0.12;
+    const fx=cx+Math.cos(theta)*r+jx;
+    const fy=cy+Math.sin(theta)*r+jy;
+    // Size: base scaled, plus a little variation; more petals = slightly bigger
+    const sz=(34+petals.length*5)*sizeScale*(0.85+rngFlower(iso_seed,302)*0.3);
+    return {petals,iso_seed,fx,fy,sz,distFromCentre:r};
+  }).filter(f=>f.petals.length);
 
-    ctx.beginPath();ctx.moveTo(handX,handY);
-    ctx.quadraticCurveTo(cpX,cpY,flowerX,flowerY);
-    ctx.strokeStyle=isCosmos?'rgba(90,120,170,0.5)':'rgba(80,120,55,0.60)';
-    ctx.lineWidth=1.5;ctx.lineCap='round';ctx.stroke();
+  // Draw outer (far from centre) first, centre flowers on top
+  flowers.sort((a,b)=>b.distFromCentre-a.distFromCentre);
 
-    const leafT=0.5+rngFlower(iso_seed,200)*0.15;
-    const lx=handX+Math.cos(angleRad)*stemLen*leafT;
-    const ly=handY+Math.sin(angleRad)*stemLen*leafT;
-    const leafAngle=angleRad+(rngFlower(iso_seed,201)>0.5?0.6:-0.6);
-    const leafLen=6+petals.length*1.2;
-    ctx.save();ctx.translate(lx,ly);ctx.rotate(leafAngle);
-    ctx.beginPath();ctx.ellipse(leafLen/2,0,leafLen/2,leafLen*0.20,0,0,Math.PI*2);
-    ctx.fillStyle=isCosmos?'rgba(70,100,150,0.4)':'rgba(100,145,65,0.42)';ctx.fill();ctx.restore();
-
-    const sz=20+petals.length*5;
-    const outerRBase=sz*0.42*(petals.length<=5?1:petals.length<=8?0.88:0.72);
-    const maxSprG=Math.min(0.38,(Math.PI*0.72)/petals.length);
-
-    if(isCosmos){
-      petals.forEach(function(color,pi){
-        const a=(pi/petals.length)*Math.PI*2-Math.PI/2;
-        const outerR=outerRBase*(0.90+rngFlower(iso_seed,pi)*0.18);
-        const tipX2=flowerX+Math.cos(a)*outerR;
-        const tipY2=flowerY+Math.sin(a)*outerR;
-        const perpA=a+Math.PI/2;
-        const tw=outerR*0.20;
-        ctx.beginPath();
-        ctx.moveTo(flowerX+Math.cos(perpA)*tw,flowerY+Math.sin(perpA)*tw);
-        ctx.lineTo(tipX2,tipY2);
-        ctx.lineTo(flowerX-Math.cos(perpA)*tw,flowerY-Math.sin(perpA)*tw);
-        ctx.closePath();
-        ctx.fillStyle=withAlpha(color,0.50);ctx.fill();
-        ctx.beginPath();ctx.arc(flowerX+Math.cos(a)*outerR*0.35,flowerY+Math.sin(a)*outerR*0.35,outerR*0.18,0,Math.PI*2);
-        ctx.fillStyle=withAlpha(color,0.95);ctx.fill();
-      });
-    } else {
-      petals.forEach(function(color,pi){
-        const a=(pi/petals.length)*Math.PI*2-Math.PI/2;
-        const outerR=outerRBase*(0.90+rngFlower(iso_seed,pi)*0.18);
-        const tipA=a+(rngFlower(iso_seed,pi+50)-0.5)*0.12;
-        const tipX2=flowerX+Math.cos(tipA)*outerR;
-        const tipY2=flowerY+Math.sin(tipA)*outerR;
-        const perpA=a+Math.PI/2;
-        const bend=(rngFlower(iso_seed,pi+81)-0.5)*outerR*0.28;
-        const midX2=flowerX+Math.cos(a)*outerR*0.5+Math.cos(perpA)*bend;
-        const midY2=flowerY+Math.sin(a)*outerR*0.5+Math.sin(perpA)*bend;
-        const sw=outerR*(0.28+rngFlower(iso_seed,pi+82)*0.08);
-        ctx.lineCap='round';
-        if(currentStyle==='watercolour'){
-          [[1.18,0.10],[1.0,0.18],[0.82,0.28],[0.64,0.40]].forEach(function(lr){
-            ctx.beginPath();ctx.moveTo(flowerX,flowerY);
-            ctx.quadraticCurveTo(midX2*lr[0]+flowerX*(1-lr[0]),midY2*lr[0]+flowerY*(1-lr[0]),tipX2*lr[0]+flowerX*(1-lr[0]),tipY2*lr[0]+flowerY*(1-lr[0]));
-            ctx.strokeStyle=withAlpha(color,lr[1]);ctx.lineWidth=sw*(1+lr[0]*0.3);ctx.stroke();
-          });
-        } else if(currentStyle==='inkwash'){
-          ctx.beginPath();ctx.moveTo(flowerX,flowerY);ctx.quadraticCurveTo(midX2,midY2,tipX2,tipY2);
-          ctx.strokeStyle=withAlpha(saturateHex(color,1.6),0.93);ctx.lineWidth=sw*0.85;ctx.stroke();
-        } else if(currentStyle==='impressionist'){
-          for(let d=0;d<5;d++){
-            const dA=a+(rngFlower(iso_seed,pi*20+d)-0.5)*maxSprG*1.5;
-            const dist=outerR*(0.3+d*0.15);
-            const dx=flowerX+Math.cos(dA)*dist,dy=flowerY+Math.sin(dA)*dist;
-            const dlen=outerR*(0.18+rngFlower(iso_seed,pi*20+d+5)*0.10);
-            const dAng=dA+Math.PI/2-0.8+(rngFlower(iso_seed,pi*20+d+10)-0.5)*0.4;
-            ctx.beginPath();ctx.moveTo(dx-Math.cos(dAng)*dlen/2,dy-Math.sin(dAng)*dlen/2);
-            ctx.lineTo(dx+Math.cos(dAng)*dlen/2,dy+Math.sin(dAng)*dlen/2);
-            ctx.strokeStyle=withAlpha(color,0.55+rngFlower(iso_seed,pi*20+d+15)*0.35);
-            ctx.lineWidth=sw*0.55;ctx.stroke();
-          }
-        } else if(currentStyle==='pointillist'){
-          [[1,0,1.0],[3,0.55,0.78],[4,1.05,0.56]].forEach(function(ring){
-            for(let d=0;d<ring[0];d++){
-              const t2=ring[0]===1?0:(d/ring[0])*Math.PI*2+rngFlower(iso_seed,pi*30+d)*0.3;
-              const dx=flowerX+Math.cos(a)*outerR*0.52+Math.cos(t2)*outerR*ring[1]*0.3;
-              const dy=flowerY+Math.sin(a)*outerR*0.52+Math.sin(t2)*outerR*ring[1]*0.3;
-              ctx.beginPath();ctx.arc(dx,dy,Math.max(0.8,outerR*ring[2]*0.22*(0.7+rngFlower(iso_seed,pi*30+d+5)*0.5)),0,Math.PI*2);
-              ctx.fillStyle=withAlpha(color,0.72+rngFlower(iso_seed,pi*30+d+10)*0.22);ctx.fill();
-            }
-          });
-        } else {
-          ctx.beginPath();ctx.moveTo(flowerX,flowerY);ctx.quadraticCurveTo(midX2,midY2,tipX2,tipY2);
-          ctx.strokeStyle=withAlpha(color,0.30);ctx.lineWidth=sw*1.2;ctx.stroke();
-          ctx.beginPath();ctx.moveTo(flowerX,flowerY);ctx.quadraticCurveTo(midX2,midY2,tipX2,tipY2);
-          ctx.strokeStyle=withAlpha(color,0.92);ctx.lineWidth=sw;ctx.stroke();
-          const hlMx=midX2+Math.cos(perpA)*sw*0.1,hlMy=midY2+Math.sin(perpA)*sw*0.1;
-          ctx.beginPath();ctx.moveTo(flowerX+Math.cos(perpA)*sw*0.1,flowerY+Math.sin(perpA)*sw*0.1);
-          ctx.quadraticCurveTo(hlMx,hlMy,tipX2+Math.cos(perpA)*sw*0.06,tipY2+Math.sin(perpA)*sw*0.06);
-          ctx.strokeStyle='rgba(255,255,255,0.40)';ctx.lineWidth=sw*0.15;ctx.stroke();
-        }
-      });
-    }
+  flowers.forEach(function(f){
+    drawGardenBloom(ctx,f.fx,f.fy,f.sz,f.petals,f.iso_seed,isCosmos);
   });
 
-  ctx.save();ctx.translate(handX,handY-10);
-  ctx.beginPath();ctx.ellipse(0,2,14,7,0,0,Math.PI*2);
-  ctx.strokeStyle=isCosmos?'rgba(120,140,190,0.5)':'rgba(190,160,130,0.50)';
-  ctx.lineWidth=3;ctx.stroke();ctx.restore();
-
+  // Stats
   const totalBlooms=activeDays.reduce((a,d)=>{
     const e=log[d.iso]||[];const s2=new Set();
     pursuits.forEach(p=>{if(e.some(tid=>getTid(tid)===p.id))s2.add(p.id)});
@@ -1668,6 +1589,94 @@ function renderGarden(){
     else if(gardenSpan==='month')titleEl.textContent=MONTHS[viewMonth]+' '+viewYear;
     else titleEl.textContent=isCosmos?'Your constellation':'Your garden';
   }
+}
+
+// Draw a single flower head (no stem) at fx,fy in current painting style
+function drawGardenBloom(ctx,fx,fy,sz,petals,seed,isCosmos){
+  const nPetals=Math.max(petals.length,1);
+  const outerRBase=sz*0.46*(nPetals<=5?1:nPetals<=8?0.88:0.74);
+
+  if(isCosmos){
+    // Comet burst — radiating tails, no centre circle
+    petals.forEach(function(color,pi){
+      const a=(pi/nPetals)*Math.PI*2-Math.PI/2;
+      const outerR=outerRBase*(0.9+rngFlower(seed,pi)*0.2);
+      const tipX=fx+Math.cos(a)*outerR,tipY=fy+Math.sin(a)*outerR;
+      const perpA=a+Math.PI/2;
+      const tw=outerR*0.18;
+      ctx.beginPath();
+      ctx.moveTo(fx+Math.cos(perpA)*tw,fy+Math.sin(perpA)*tw);
+      ctx.lineTo(tipX,tipY);
+      ctx.lineTo(fx-Math.cos(perpA)*tw,fy-Math.sin(perpA)*tw);
+      ctx.closePath();
+      ctx.fillStyle=withAlpha(color,0.55);ctx.fill();
+      ctx.beginPath();ctx.arc(fx+Math.cos(a)*outerR*0.42,fy+Math.sin(a)*outerR*0.42,outerR*0.16,0,Math.PI*2);
+      ctx.fillStyle=withAlpha(color,0.95);ctx.fill();
+    });
+    return;
+  }
+
+  const style=currentStyle;
+  // Two layers of petals for fullness
+  for(let layer=0;layer<2;layer++){
+    const layerR=outerRBase*(layer===0?1.0:0.6);
+    const layerRot=layer*Math.PI/nPetals;
+    const layerOp=layer===0?1:0.88;
+    petals.forEach(function(color,pi){
+      const a=(pi/nPetals)*Math.PI*2-Math.PI/2+layerRot;
+      const outerR=layerR*(0.9+rngFlower(seed,pi+layer*10)*0.18);
+      const tipA=a+(rngFlower(seed,pi+50)-0.5)*0.1;
+      const tipX=fx+Math.cos(tipA)*outerR,tipY=fy+Math.sin(tipA)*outerR;
+      const perpA=a+Math.PI/2;
+      const bend=(rngFlower(seed,pi+81)-0.5)*outerR*0.3;
+      const midX=fx+Math.cos(a)*outerR*0.5+Math.cos(perpA)*bend;
+      const midY=fy+Math.sin(a)*outerR*0.5+Math.sin(perpA)*bend;
+      const sw=outerR*(0.34+rngFlower(seed,pi+82)*0.1);
+      ctx.lineCap='round';
+
+      if(style==='watercolour'){
+        [[1.15,0.12],[0.95,0.22],[0.72,0.34]].forEach(function(lr){
+          ctx.beginPath();ctx.moveTo(fx,fy);
+          ctx.quadraticCurveTo(midX*lr[0]+fx*(1-lr[0]),midY*lr[0]+fy*(1-lr[0]),tipX*lr[0]+fx*(1-lr[0]),tipY*lr[0]+fy*(1-lr[0]));
+          ctx.strokeStyle=withAlpha(color,lr[1]*layerOp);ctx.lineWidth=sw*(1+lr[0]*0.4);ctx.stroke();
+        });
+      } else if(style==='inkwash'){
+        ctx.beginPath();ctx.moveTo(fx,fy);ctx.quadraticCurveTo(midX,midY,tipX,tipY);
+        ctx.strokeStyle=withAlpha(saturateHex(color,1.6),0.9*layerOp);ctx.lineWidth=sw*0.9;ctx.stroke();
+      } else if(style==='pointillist'){
+        const steps=5;
+        for(let st=0;st<=steps;st++){
+          const tt=st/steps;
+          const dx=fx+(tipX-fx)*tt,dy=fy+(tipY-fy)*tt;
+          ctx.beginPath();ctx.arc(dx,dy,sw*0.42*(1-tt*0.3),0,Math.PI*2);
+          ctx.fillStyle=withAlpha(color,(0.7+rngFlower(seed,pi*10+st)*0.25)*layerOp);ctx.fill();
+        }
+      } else if(style==='impressionist'){
+        for(let d=0;d<4;d++){
+          const dt=0.3+d*0.2;
+          const dx=fx+(tipX-fx)*dt,dy=fy+(tipY-fy)*dt;
+          const dl=sw*1.2,dAng=a+Math.PI/2;
+          ctx.beginPath();ctx.moveTo(dx-Math.cos(dAng)*dl/2,dy-Math.sin(dAng)*dl/2);
+          ctx.lineTo(dx+Math.cos(dAng)*dl/2,dy+Math.sin(dAng)*dl/2);
+          ctx.strokeStyle=withAlpha(color,(0.6+rngFlower(seed,pi*10+d)*0.3)*layerOp);
+          ctx.lineWidth=sw*0.6;ctx.stroke();
+        }
+      } else {
+        ctx.beginPath();ctx.moveTo(fx,fy);ctx.quadraticCurveTo(midX,midY,tipX,tipY);
+        ctx.strokeStyle=withAlpha(color,0.3*layerOp);ctx.lineWidth=sw*1.25;ctx.stroke();
+        ctx.beginPath();ctx.moveTo(fx,fy);ctx.quadraticCurveTo(midX,midY,tipX,tipY);
+        ctx.strokeStyle=withAlpha(color,0.92*layerOp);ctx.lineWidth=sw;ctx.stroke();
+        ctx.beginPath();ctx.moveTo(fx+Math.cos(perpA)*sw*0.1,fy+Math.sin(perpA)*sw*0.1);
+        ctx.quadraticCurveTo(midX,midY,tipX,tipY);
+        ctx.strokeStyle='rgba(255,255,255,'+(0.35*layerOp).toFixed(2)+')';ctx.lineWidth=sw*0.16;ctx.stroke();
+      }
+    });
+  }
+  // Warm centre
+  ctx.beginPath();ctx.arc(fx,fy,sz*0.10,0,Math.PI*2);
+  ctx.fillStyle='rgba(245,200,90,0.85)';ctx.fill();
+  ctx.beginPath();ctx.arc(fx,fy,sz*0.055,0,Math.PI*2);
+  ctx.fillStyle='rgba(220,160,50,0.9)';ctx.fill();
 }
 function saveGarden(){
   const canvas=document.getElementById('garden-canvas');
