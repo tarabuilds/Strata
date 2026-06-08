@@ -601,15 +601,16 @@ body{
           <div style="font-family:var(--serif);font-size:18px;font-weight:700;font-style:italic;color:var(--ink)">Strata</div>
           <div style="font-size:9px;font-family:var(--mono);color:var(--ink3);margin-top:2px;margin-bottom:0.75rem">where life becomes art</div>
           <div style="display:flex;flex-direction:column;gap:0.6rem">
-            <div style="font-size:11px;font-family:var(--mono);color:var(--ink2);line-height:1.7">Strata turns your daily habits into a living artwork. Each pursuit you log becomes a brushstroke — layering up day by day, week by week, into something uniquely yours.</div>
+            <div style="font-size:11px;font-family:var(--mono);color:var(--ink2);line-height:1.7">Strata turns the things you do every day into something beautiful. Each pursuit you log becomes a mark — building layer by layer into a picture of how you spend your life.</div>
             <div style="font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink3);font-family:var(--mono);margin-top:0.25rem">What you can do</div>
             <div style="display:flex;flex-direction:column;gap:5px">
-              <div style="display:flex;gap:8px;font-size:11px;font-family:var(--mono);color:var(--ink2);line-height:1.6"><span style="color:var(--accent);flex-shrink:0">→</span><span><strong>Month view</strong> — tap any day to log your pursuits. Watch flowers bloom as your week fills in.</span></div>
-              <div style="display:flex;gap:8px;font-size:11px;font-family:var(--mono);color:var(--ink2);line-height:1.6"><span style="color:var(--accent);flex-shrink:0">→</span><span><strong>Year view</strong> — see your whole year at a glance. A garden of small moments.</span></div>
-              <div style="display:flex;gap:8px;font-size:11px;font-family:var(--mono);color:var(--ink2);line-height:1.6"><span style="color:var(--accent);flex-shrink:0">→</span><span><strong>Garden</strong> — your week's blooms gathered into a bouquet. Save it as a keepsake.</span></div>
+              <div style="display:flex;gap:8px;font-size:11px;font-family:var(--mono);color:var(--ink2);line-height:1.6"><span style="color:var(--accent);flex-shrink:0">→</span><span><strong>Month view</strong> — tap any day to log your pursuits. Watch each day come alive as you fill it in.</span></div>
+              <div style="display:flex;gap:8px;font-size:11px;font-family:var(--mono);color:var(--ink2);line-height:1.6"><span style="color:var(--accent);flex-shrink:0">→</span><span><strong>Year view</strong> — see your whole year at a glance. Every logged day, every small moment.</span></div>
+              <div style="display:flex;gap:8px;font-size:11px;font-family:var(--mono);color:var(--ink2);line-height:1.6"><span style="color:var(--accent);flex-shrink:0">→</span><span><strong>Garden / Constellation</strong> — your week gathered into one image. Save it as a keepsake.</span></div>
               <div style="display:flex;gap:8px;font-size:11px;font-family:var(--mono);color:var(--ink2);line-height:1.6"><span style="color:var(--accent);flex-shrink:0">→</span><span><strong>Art mode</strong> — your data reimagined as abstract art. Spiral, radiate, flow. Save as PNG.</span></div>
-              <div style="display:flex;gap:8px;font-size:11px;font-family:var(--mono);color:var(--ink2);line-height:1.6"><span style="color:var(--accent);flex-shrink:0">→</span><span><strong>Pursuits</strong> — customise what you track, choose colours, pick a painting style.</span></div>
-              <div style="display:flex;gap:8px;font-size:11px;font-family:var(--mono);color:var(--ink2);line-height:1.6"><span style="color:var(--accent);flex-shrink:0">→</span><span><strong>make it you</strong> — tap any colour dot to change the app's accent colour.</span></div>
+              <div style="display:flex;gap:8px;font-size:11px;font-family:var(--mono);color:var(--ink2);line-height:1.6"><span style="color:var(--accent);flex-shrink:0">→</span><span><strong>Pursuits</strong> — customise what you track, choose your colours, pick a style.</span></div>
+              <div style="display:flex;gap:8px;font-size:11px;font-family:var(--mono);color:var(--ink2);line-height:1.6"><span style="color:var(--accent);flex-shrink:0">→</span><span><strong>make it you</strong> — tap any colour dot to change the accent colour throughout the app.</span></div>
+              <div style="display:flex;gap:8px;font-size:11px;font-family:var(--mono);color:var(--ink2);line-height:1.6"><span style="color:var(--accent);flex-shrink:0">→</span><span><strong>Themes</strong> — switch between Strata (warm, botanical) and Cosmos (dark, celestial).</span></div>
             </div>
             <div style="font-size:10px;font-family:var(--mono);color:var(--ink3);line-height:1.6;margin-top:0.25rem;padding-top:0.75rem;border-top:1px solid var(--border)">Your data lives on your device. Sign in with Google to sync across devices. Export anytime as a backup.</div>
           </div>
@@ -684,8 +685,8 @@ body{
           <span class="art-lbl">Span</span>
           <button class="art-pill" data-span="0" onclick="setSpan(0)">Day</button>
           <button class="art-pill" data-span="-1" onclick="setSpan(-1)">Week</button>
-          <button class="art-pill active" data-span="1" onclick="setSpan(1)">1m</button>
-          <button class="art-pill" data-span="3" onclick="setSpan(3)">3m</button>
+          <button class="art-pill" data-span="1" onclick="setSpan(1)">1m</button>
+          <button class="art-pill active" data-span="3" onclick="setSpan(3)">3m</button>
           <button class="art-pill" data-span="6" onclick="setSpan(6)">6m</button>
           <button class="art-pill" data-span="12" onclick="setSpan(12)">1y</button>
           <div class="art-sep"></div>
@@ -752,6 +753,12 @@ const PALETTE=[
   '#A8796A','#8A7A5A','#6B8F71','#5A7A8A','#7A6A9A','#9A6A7A',
   '#C4A898','#C4B888','#98C4A8','#98B4C4','#A898C4','#C498B8'
 ];
+const COSMOS_PALETTE=[
+  '#5a8fd4','#7b6fd4','#d46fa8','#d4b03a','#4ab87a','#d4603a','#4ab8d4','#a8d45a','#d4d45a','#a03ad4',
+  '#d43a6b','#3ad4a0','#6ab8f5','#f59a3a','#b45af5','#3af5b4','#f53a8a','#3a9af5','#f5d43a','#8af53a',
+  '#f53a3a','#3af5f5','#aa3af5','#f5aa3a','#3af5aa','#c8d4f5','#f5c8d4','#d4f5c8','#f5f5c8','#c8f5f5',
+  '#2a3858','#3a2858','#2a5838','#583a28','#582a3a','#1a2440','#08081a','#0a1828','#1a0828','#0a1808'
+];
 const BG_COLORS=[
   {c:'#faf8f4',n:'Paper'},{c:'#f5f0e8',n:'Linen'},{c:'#e8dcc8',n:'Parchment'},
   {c:'#f0e8d8',n:'Cream'},{c:'#dde4ee',n:'Sky'},{c:'#ccd8e8',n:'Powder'},
@@ -776,10 +783,15 @@ const now=new Date();
 let viewMonth=now.getMonth(), viewYear=now.getFullYear(), viewYearPage=now.getFullYear();
 let pursuits=JSON.parse(localStorage.getItem('sp_pursuits')||'null')||DEFAULT_PURSUITS.map(p=>({...p}));
 let log=JSON.parse(localStorage.getItem('sp_log')||'{}');
+// Clean any null/invalid entries from log
+Object.keys(log).forEach(function(d){
+  if(Array.isArray(log[d])){log[d]=log[d].filter(function(e){return e!=null});if(!log[d].length)delete log[d];}
+  else{delete log[d];}
+});
 let currentStyle=localStorage.getItem('sp_style')||'expressionist';
 let accentColor=localStorage.getItem('sp_accent')||'#6b8f71';
 let artComp=localStorage.getItem('sp_comp')||'flow';
-let artSpan=parseInt(localStorage.getItem('sp_span')||'1');
+let artSpan=parseInt(localStorage.getItem('sp_span')||'3');
 let artBg=localStorage.getItem('sp_artbg')||'#faf8f4';
 let currentView='month';
 let logDate=null, logSeq=[];
@@ -836,6 +848,13 @@ function buildGlobalSeq(){
   });
   return seq;
 }
+function getTid(entry){
+  // Safely extract the pursuit id from a log entry (handles null, string, or object)
+  if(entry==null)return null;
+  if(typeof entry==='string')return entry;
+  if(typeof entry==='object'&&entry.tid)return entry.tid;
+  return null;
+}
 function taskColor(tid){const t=pursuits.find(p=>p.id===tid);return t?t.color:'#888'}
 
 // =======================================================
@@ -851,7 +870,7 @@ function renderSidebar(){
   const navItems=[
     {id:'month',label:'Month',icon:'📅'},
     {id:'year',label:'Year',icon:'🗓'},
-    {id:'garden',label:'Garden',icon:'🌸'},
+    {id:'garden',label:'garden-label',icon:'🌸'},
     {id:'art',label:'Art mode',icon:'🎨'},
     {id:'more',label:'More',icon:'⚙️'}
   ];
@@ -861,7 +880,8 @@ function renderSidebar(){
     const cls=sid==='sidebar-nav'?'nav-item':'drawer-nav-item';
     el.innerHTML=navItems.map(function(item){
       const active=currentView===item.id?' active':'';
-      return '<button class="'+cls+active+'" data-view="'+item.id+'"><span>'+item.label+'</span></button>';
+      const lbl=item.id==='garden'?(currentTheme==='cosmos'?'Constellation':'Garden'):item.label;
+      return '<button class="'+cls+active+'" data-view="'+item.id+'"><span>'+lbl+'</span></button>';
     }).join('');
     el.querySelectorAll('[data-view]').forEach(function(btn){
       btn.onclick=function(){showView(btn.dataset.view);closeDrawer()};
@@ -873,7 +893,8 @@ function renderSidebar(){
     const el=document.getElementById(sid);
     if(!el)return;
     const size=sid==='cal-colour-dots'?13:14;
-    el.innerHTML=PALETTE.map(function(col){
+    const pal=currentTheme==='cosmos'?COSMOS_PALETTE:PALETTE;
+    el.innerHTML=pal.map(function(col){
       const active=col===accentColor;
       const outline=active?'2.5px solid '+col:'1.5px solid transparent';
       const scale=active?'scale(1.18)':'scale(1)';
@@ -1028,14 +1049,18 @@ function renderMonthView(){
     const seen=new Set();const petals=[];
     pursuits.forEach(p=>{
       entries.forEach(tid=>{
-        if((typeof tid==='string'?tid:tid.tid)===p.id)petals.push(p.color);
+        if(getTid(tid)===p.id)petals.push(p.color);
       });
     });
     // dedupe for flower (one petal per pursuit type)
     const petalsSeen=new Set();const uniquePetals=[];
-    pursuits.forEach(p=>{if(entries.some(tid=>(typeof tid==='string'?tid:tid.tid)===p.id)&&!petalsSeen.has(p.id)){petalsSeen.add(p.id);uniquePetals.push(p.color)}});
+    pursuits.forEach(p=>{if(entries.some(tid=>getTid(tid)===p.id)&&!petalsSeen.has(p.id)){petalsSeen.add(p.id);uniquePetals.push(p.color)}});
     const daySeed=viewYear*10000+viewMonth*100+d;
-    const marker=uniquePetals.length?(currentTheme==='cosmos'?cometSVG(uniquePetals,20,daySeed):flowerSVG(uniquePetals,20,daySeed)):'';
+    let marker='';
+    if(uniquePetals.length){
+      try{marker=currentTheme==='cosmos'?cometSVG(uniquePetals,20,daySeed):flowerSVG(uniquePetals,20,daySeed);}
+      catch(e){marker='';}
+    }
     html+=`<div class="cal-cell${isToday?' today':''}${uniquePetals.length?' logged':''}" onclick="openLog('${iso}')"><span class="day-num">${d}</span>${marker}</div>`;
   }
   document.getElementById('cal-grid').innerHTML=html;
@@ -1058,7 +1083,7 @@ function renderYearView(){
       const hasLog=(log[iso]||[]).length>0;
       const isT=iso===todayStr;
       const petalsSeen=new Set();const up=[];
-      if(hasLog)pursuits.forEach(p=>{if((log[iso]||[]).some(tid=>(typeof tid==='string'?tid:tid.tid)===p.id)&&!petalsSeen.has(p.id)){petalsSeen.add(p.id);up.push(p.color)}});
+      if(hasLog)pursuits.forEach(p=>{if((log[iso]||[]).some(tid=>getTid(tid)===p.id)&&!petalsSeen.has(p.id)){petalsSeen.add(p.id);up.push(p.color)}});
       const seed=viewYearPage*10000+m*100+d;
       const miniMarker=up.length?(currentTheme==='cosmos'?cometSVG(up,14,seed):flowerSVG(up,14,seed)):'';
       html+=`<div class="mini-cell${isT?' today-mini':''}">${miniMarker}</div>`;
@@ -1081,18 +1106,44 @@ function openLog(iso){
   document.getElementById('log-panel').classList.add('open');
 }
 function renderLogBtns(){
-  const counts={};(logSeq||[]).forEach(tid=>{counts[typeof tid==='string'?tid:tid.tid]=(counts[typeof tid==='string'?tid:tid.tid]||0)+1});
+  const counts={};(logSeq||[]).forEach(tid=>{counts[getTid(tid)]=(counts[getTid(tid)]||0)+1});
   document.getElementById('pursuit-btns').innerHTML=pursuits.map(function(p){
     const cnt=counts[p.id]||0;
     const logged=cnt>0?' logged':'';
-    const countSpan=cnt>0?'<span class="log-count">×'+cnt+'</span>':'';
-    return '<button class="pursuit-log-btn'+logged+'" data-tid="'+p.id+'"><span style="width:10px;height:10px;border-radius:50%;background:'+p.color+';flex-shrink:0"></span><span>'+p.label+'</span>'+countSpan+'</button>';
+    if(cnt>0){
+      // Show count with +/- controls
+      return '<div class="pursuit-log-btn'+logged+'" style="display:flex;align-items:center;gap:8px">'
+        +'<span style="width:10px;height:10px;border-radius:50%;background:'+p.color+';flex-shrink:0"></span>'
+        +'<span style="flex:1">'+p.label+'</span>'
+        +'<button data-action="remove" data-tid="'+p.id+'" style="width:24px;height:24px;border-radius:50%;border:1.5px solid var(--border2);background:none;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;color:var(--ink2)">-</button>'
+        +'<span style="font-size:11px;font-weight:600;min-width:14px;text-align:center">'+cnt+'</span>'
+        +'<button data-action="add" data-tid="'+p.id+'" style="width:24px;height:24px;border-radius:50%;border:1.5px solid var(--accent);background:var(--accent);cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;color:var(--accent-fg)">+</button>'
+        +'</div>';
+    }
+    return '<button class="pursuit-log-btn" data-tid="'+p.id+'">'
+      +'<span style="width:10px;height:10px;border-radius:50%;background:'+p.color+';flex-shrink:0"></span>'
+      +'<span>'+p.label+'</span>'
+      +'</button>';
   }).join('');
-  document.querySelectorAll('.pursuit-log-btn').forEach(function(btn){
-    btn.onclick=function(){toggleLogPursuit(btn.dataset.tid)};
+  // Only the simple (count=0) buttons get the row click handler
+  document.querySelectorAll('button.pursuit-log-btn[data-tid]').forEach(function(btn){
+    btn.onclick=function(){addLogPursuit(btn.dataset.tid)};
+  });
+  document.querySelectorAll('[data-action="add"]').forEach(function(btn){
+    btn.onclick=function(e){e.stopPropagation();addLogPursuit(btn.dataset.tid)};
+  });
+  document.querySelectorAll('[data-action="remove"]').forEach(function(btn){
+    btn.onclick=function(e){e.stopPropagation();toggleLogPursuit(btn.dataset.tid)};
   });
 }
-function toggleLogPursuit(tid){logSeq.push(tid);renderLogBtns()}
+function toggleLogPursuit(tid){
+  // If already logged, remove one instance (undo); otherwise add
+  const idx=logSeq.lastIndexOf(tid);
+  if(idx>-1){logSeq.splice(idx,1)}
+  else{logSeq.push(tid)}
+  renderLogBtns();
+}
+function addLogPursuit(tid){logSeq.push(tid);renderLogBtns();}
 function closeLog(){logDate=null;logSeq=[];document.getElementById('log-panel').classList.remove('open')}
 function saveLog(){
   if(logDate){
@@ -1182,13 +1233,13 @@ function toggleBgPicker(){
 
 function getArtEntries(){
   const todayStr=todayIso();
-  if(artSpan===0)return(log[todayStr]||[]).map((tid,i)=>({date:todayStr,tid:typeof tid==='string'?tid:tid.tid,color:taskColor(typeof tid==='string'?tid:tid.tid)}));
-  if(artSpan===-1){const entries=[];for(let i=6;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);const iso=isoDate(d.getFullYear(),d.getMonth(),d.getDate());(log[iso]||[]).forEach(tid=>{entries.push({date:iso,tid:typeof tid==='string'?tid:tid.tid,color:taskColor(typeof tid==='string'?tid:tid.tid)})})}return entries}
+  if(artSpan===0)return(log[todayStr]||[]).map((tid,i)=>({date:todayStr,tid:getTid(tid),color:taskColorgetTid(tid)}));
+  if(artSpan===-1){const entries=[];for(let i=6;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);const iso=isoDate(d.getFullYear(),d.getMonth(),d.getDate());(log[iso]||[]).forEach(tid=>{entries.push({date:iso,tid:getTid(tid),color:taskColorgetTid(tid)})})}return entries}
   const allEntries=[];
   Object.keys(log).sort().forEach(date=>{
     const d=new Date(date+'T12:00:00');
     const mDiff=(viewYear-d.getFullYear())*12+(viewMonth-d.getMonth());
-    if(mDiff>=0&&mDiff<artSpan)(log[date]||[]).forEach(tid=>{allEntries.push({date,tid:typeof tid==='string'?tid:tid.tid,color:taskColor(typeof tid==='string'?tid:tid.tid)})});
+    if(mDiff>=0&&mDiff<artSpan)(log[date]||[]).forEach(tid=>{allEntries.push({date,tid:getTid(tid),color:taskColorgetTid(tid)})});
   });
   return allEntries;
 }
@@ -1331,7 +1382,7 @@ function redrawArt(){
   const entries=getArtEntries();
   const total=entries.length;
   if(!total){document.getElementById('art-hint').textContent='No entries';return}
-  document.getElementById('art-hint').textContent=total+' marks · '+currentStyle;
+  document.getElementById('art-hint').textContent=total+' marks - '+currentStyle;
   const intensity=parseFloat(document.getElementById('art-opacity').value||0.7);
   const scale=parseFloat(document.getElementById('art-size').value||1);
   const markW=Math.min(W,H)*0.09*scale;
@@ -1452,32 +1503,59 @@ function renderGarden(){
   const ctx=canvas.getContext('2d');
   ctx.scale(dpr,dpr);
 
-  // Warm background
-  const grad=ctx.createLinearGradient(0,0,0,H);
-  grad.addColorStop(0,'#f5f0e8');grad.addColorStop(1,'#e8e0cc');
-  ctx.fillStyle=grad;ctx.fillRect(0,0,W,H);
+  const isCosmos=currentTheme==='cosmos';
+
+  // Background — theme matched, rich
+  if(isCosmos){
+    const g=ctx.createRadialGradient(W/2,H*0.45,0,W/2,H*0.45,Math.max(W,H)*0.7);
+    g.addColorStop(0,'#0e1330');g.addColorStop(0.6,'#070a1e');g.addColorStop(1,'#03030c');
+    ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+    // Background stars
+    for(let s=0;s<90;s++){
+      const sx=rngFlower(s*99,1)*W,sy=rngFlower(s*99,2)*H;
+      const sr=0.3+rngFlower(s*99,3)*0.9;
+      ctx.beginPath();ctx.arc(sx,sy,sr,0,Math.PI*2);
+      ctx.fillStyle='rgba(200,215,255,'+(0.12+rngFlower(s*99,4)*0.45).toFixed(2)+')';ctx.fill();
+    }
+  } else {
+    const g=ctx.createLinearGradient(0,0,0,H);
+    g.addColorStop(0,'#1a2e1e');g.addColorStop(0.55,'#16281a');g.addColorStop(1,'#0e1c12');
+    ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+    // Soft vignette glow behind bouquet
+    const vg=ctx.createRadialGradient(W/2,H*0.5,0,W/2,H*0.5,Math.max(W,H)*0.55);
+    vg.addColorStop(0,'rgba(120,160,100,0.10)');vg.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle=vg;ctx.fillRect(0,0,W,H);
+  }
 
   const days=getGardenDays();
   const activeDays=days.filter(d=>(log[d.iso]||[]).length>0);
   if(!activeDays.length){
-    ctx.fillStyle='#9c8e7a';ctx.font='12px monospace';
-    ctx.textAlign='center';ctx.fillText('No data yet — start logging pursuits!',W/2,H/2);
+    ctx.fillStyle=isCosmos?'#4a5880':'#6a8a6a';
+    ctx.font='13px monospace';ctx.textAlign='center';
+    ctx.fillText('No data yet — start logging pursuits!',W/2,H/2);
     document.getElementById('garden-stat').textContent='';
     return;
   }
 
   const n=activeDays.length;
-  // Very tight bouquet — stems overlap, like a real hand-held bunch
-  const handX=W/2, handY=H*0.95;
-  // Narrow spread: max 50 degrees so flowers bunch together and overlap
-  const maxSpreadDeg=Math.min(50, 10+n*5);
+  // Centered bouquet — gather point near vertical centre, fills most of canvas
+  const handX=W/2, handY=H*0.86;
+  // Wider spread to fill canvas, flowers reach near top
+  const maxSpreadDeg=Math.min(150, 50+n*9);
   const startAngleDeg=-90-maxSpreadDeg/2;
 
-  activeDays.forEach((day,i)=>{
+  // Sort so middle stems are tallest (dome shape), draw back-to-front
+  const order=activeDays.map((d,i)=>i).sort((a,b)=>{
+    const mid=(n-1)/2;
+    return Math.abs(b-mid)-Math.abs(a-mid); // outer first, centre last (on top)
+  });
+
+  order.forEach(function(i){
+    const day=activeDays[i];
     const entries=log[day.iso]||[];
     const seen=new Set();const petals=[];
     pursuits.forEach(p=>{
-      if(entries.some(tid=>(typeof tid==='string'?tid:tid.tid)===p.id)&&!seen.has(p.id)){
+      if(entries.some(tid=>getTid(tid)===p.id)&&!seen.has(p.id)){
         seen.add(p.id);petals.push(p.color);
       }
     });
@@ -1485,123 +1563,163 @@ function renderGarden(){
 
     const angleDeg=n===1?-90:startAngleDeg+(i/(n-1))*maxSpreadDeg;
     const angleRad=angleDeg*Math.PI/180;
-    // Stems vary in length slightly — middle ones longer for classic dome shape
     const midness=n===1?1:1-Math.abs((i-(n-1)/2)/((n-1)/2));
     const iso_seed=day.iso.split('').reduce((a,ch,si)=>a+ch.charCodeAt(0)*(si+1),0);
-    const stemLen=H*(0.36+midness*0.10)+rngFlower(iso_seed,99)*H*0.03;
+    // Long stems that fill canvas height
+    const stemLen=H*(0.50+midness*0.22)+rngFlower(iso_seed,99)*H*0.05;
     const flowerX=handX+Math.cos(angleRad)*stemLen;
     const flowerY=handY+Math.sin(angleRad)*stemLen;
-
-    // Natural S-curve on stem — alternates left/right
     const side=i%2?1:-1;
-    const cpX=handX+Math.cos(angleRad)*stemLen*0.5+Math.cos(angleRad+Math.PI/2)*stemLen*0.06*side;
-    const cpY=handY+Math.sin(angleRad)*stemLen*0.5+Math.sin(angleRad+Math.PI/2)*stemLen*0.06*side;
+    const cpX=handX+Math.cos(angleRad)*stemLen*0.5+Math.cos(angleRad+Math.PI/2)*stemLen*0.08*side;
+    const cpY=handY+Math.sin(angleRad)*stemLen*0.5+Math.sin(angleRad+Math.PI/2)*stemLen*0.08*side;
 
-    // Draw stem
+    // Stem
     ctx.beginPath();ctx.moveTo(handX,handY);
     ctx.quadraticCurveTo(cpX,cpY,flowerX,flowerY);
-    ctx.strokeStyle='rgba(80,120,55,0.60)';ctx.lineWidth=1.5;ctx.lineCap='round';ctx.stroke();
+    ctx.strokeStyle=isCosmos?'rgba(90,120,170,0.45)':'rgba(110,150,80,0.65)';
+    ctx.lineWidth=2;ctx.lineCap='round';ctx.stroke();
 
-    // Leaf on stem
-    const leafT=0.5+rngFlower(iso_seed,200)*0.15;
-    const lx=handX+Math.cos(angleRad)*stemLen*leafT;
-    const ly=handY+Math.sin(angleRad)*stemLen*leafT;
-    const leafSide=rngFlower(iso_seed,201)>0.5?0.6:-0.6;
-    const leafAngle=angleRad+leafSide;
-    const leafLen=6+petals.length*1.2;
-    ctx.save();ctx.translate(lx,ly);ctx.rotate(leafAngle);
-    ctx.beginPath();ctx.ellipse(leafLen/2,0,leafLen/2,leafLen*0.20,0,0,Math.PI*2);
-    ctx.fillStyle='rgba(100,145,65,0.42)';ctx.fill();ctx.restore();
-
-    // Draw petals with current painting style
-    const sz=20+petals.length*5;
-    const outerRBase=sz*0.42*(petals.length<=5?1:petals.length<=8?0.88:0.72);
-    const maxSprG=Math.min(0.38,(Math.PI*0.72)/petals.length);
-    petals.forEach(function(color,pi){
-      const a=(pi/petals.length)*Math.PI*2-Math.PI/2;
-      const outerR=outerRBase*(0.90+rngFlower(iso_seed,pi)*0.18);
-      const tipA=a+(rngFlower(iso_seed,pi+50)-0.5)*0.12;
-      const tipX2=flowerX+Math.cos(tipA)*outerR;
-      const tipY2=flowerY+Math.sin(tipA)*outerR;
-      const perpA=a+Math.PI/2;
-      const bend=(rngFlower(iso_seed,pi+81)-0.5)*outerR*0.28;
-      const midX2=flowerX+Math.cos(a)*outerR*0.5+Math.cos(perpA)*bend;
-      const midY2=flowerY+Math.sin(a)*outerR*0.5+Math.sin(perpA)*bend;
-      const sw=outerR*(0.28+rngFlower(iso_seed,pi+82)*0.08);
-      ctx.lineCap='round';
-      if(currentStyle==='watercolour'){
-        [[1.18,0.10],[1.0,0.18],[0.82,0.28],[0.64,0.40]].forEach(function(lr){
-          ctx.beginPath();ctx.moveTo(flowerX,flowerY);
-          ctx.quadraticCurveTo(midX2*lr[0]+flowerX*(1-lr[0]),midY2*lr[0]+flowerY*(1-lr[0]),tipX2*lr[0]+flowerX*(1-lr[0]),tipY2*lr[0]+flowerY*(1-lr[0]));
-          ctx.strokeStyle=withAlpha(color,lr[1]);ctx.lineWidth=sw*(1+lr[0]*0.3);ctx.stroke();
-        });
-      } else if(currentStyle==='inkwash'){
-        ctx.beginPath();ctx.moveTo(flowerX,flowerY);ctx.quadraticCurveTo(midX2,midY2,tipX2,tipY2);
-        ctx.strokeStyle=withAlpha(saturateHex(color,1.6),0.93);ctx.lineWidth=sw*0.85;ctx.stroke();
-      } else if(currentStyle==='impressionist'){
-        for(let d=0;d<5;d++){
-          const dA=a+(rngFlower(iso_seed,pi*20+d)-0.5)*maxSprG*1.5;
-          const dist=outerR*(0.3+d*0.15);
-          const dx=flowerX+Math.cos(dA)*dist,dy=flowerY+Math.sin(dA)*dist;
-          const dlen=outerR*(0.18+rngFlower(iso_seed,pi*20+d+5)*0.10);
-          const dAng=dA+Math.PI/2-0.8+(rngFlower(iso_seed,pi*20+d+10)-0.5)*0.4;
-          ctx.beginPath();ctx.moveTo(dx-Math.cos(dAng)*dlen/2,dy-Math.sin(dAng)*dlen/2);
-          ctx.lineTo(dx+Math.cos(dAng)*dlen/2,dy+Math.sin(dAng)*dlen/2);
-          ctx.strokeStyle=withAlpha(color,0.55+rngFlower(iso_seed,pi*20+d+15)*0.35);
-          ctx.lineWidth=sw*0.55;ctx.stroke();
-        }
-      } else if(currentStyle==='pointillist'){
-        [[1,0,1.0],[3,0.55,0.78],[4,1.05,0.56]].forEach(function(ring){
-          for(let d=0;d<ring[0];d++){
-            const t2=ring[0]===1?0:(d/ring[0])*Math.PI*2+rngFlower(iso_seed,pi*30+d)*0.3;
-            const dx=flowerX+Math.cos(a)*outerR*0.52+Math.cos(t2)*outerR*ring[1]*0.3;
-            const dy=flowerY+Math.sin(a)*outerR*0.52+Math.sin(t2)*outerR*ring[1]*0.3;
-            ctx.beginPath();ctx.arc(dx,dy,Math.max(0.8,outerR*ring[2]*0.22*(0.7+rngFlower(iso_seed,pi*30+d+5)*0.5)),0,Math.PI*2);
-            ctx.fillStyle=withAlpha(color,0.72+rngFlower(iso_seed,pi*30+d+10)*0.22);ctx.fill();
-          }
-        });
-      } else {
-        ctx.beginPath();ctx.moveTo(flowerX,flowerY);ctx.quadraticCurveTo(midX2,midY2,tipX2,tipY2);
-        ctx.strokeStyle=withAlpha(color,0.30);ctx.lineWidth=sw*1.2;ctx.stroke();
-        ctx.beginPath();ctx.moveTo(flowerX,flowerY);ctx.quadraticCurveTo(midX2,midY2,tipX2,tipY2);
-        ctx.strokeStyle=withAlpha(color,0.92);ctx.lineWidth=sw;ctx.stroke();
-        const hlMx=midX2+Math.cos(perpA)*sw*0.1,hlMy=midY2+Math.sin(perpA)*sw*0.1;
-        ctx.beginPath();ctx.moveTo(flowerX+Math.cos(perpA)*sw*0.1,flowerY+Math.sin(perpA)*sw*0.1);
-        ctx.quadraticCurveTo(hlMx,hlMy,tipX2+Math.cos(perpA)*sw*0.06,tipY2+Math.sin(perpA)*sw*0.06);
-        ctx.strokeStyle='rgba(255,255,255,0.40)';ctx.lineWidth=sw*0.15;ctx.stroke();
-      }
+    // Two leaves per stem for lushness
+    [0.4,0.62].forEach(function(leafT,li){
+      const lx=handX+Math.cos(angleRad)*stemLen*leafT;
+      const ly=handY+Math.sin(angleRad)*stemLen*leafT;
+      const leafSide=(li%2?1:-1)*(0.6+rngFlower(iso_seed,li+30)*0.3);
+      const leafAngle=angleRad+leafSide;
+      const leafLen=10+petals.length*1.6;
+      ctx.save();ctx.translate(lx,ly);ctx.rotate(leafAngle);
+      ctx.beginPath();ctx.ellipse(leafLen/2,0,leafLen/2,leafLen*0.26,0,0,Math.PI*2);
+      ctx.fillStyle=isCosmos?'rgba(70,100,150,0.35)':'rgba(95,140,65,0.5)';
+      ctx.fill();
+      // Leaf vein
+      ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(leafLen,0);
+      ctx.strokeStyle=isCosmos?'rgba(90,120,170,0.3)':'rgba(110,155,75,0.4)';
+      ctx.lineWidth=0.6;ctx.stroke();
+      ctx.restore();
     });
+
+    // Flower — fuller, layered, style-aware
+    const sz=30+petals.length*7;
+    drawGardenFlower(ctx,flowerX,flowerY,sz,petals,iso_seed,isCosmos);
   });
 
-  // Ribbon wrap — two crossed bands at base
-  ctx.save();ctx.translate(handX,handY-10);
-  ctx.beginPath();ctx.ellipse(0,2,14,7,0,0,Math.PI*2);
-  ctx.strokeStyle='rgba(190,160,130,0.50)';ctx.lineWidth=3;ctx.stroke();
-  ctx.beginPath();ctx.ellipse(0,2,14,7,0.4,0,Math.PI*2);
-  ctx.strokeStyle='rgba(190,160,130,0.30)';ctx.lineWidth=2;ctx.stroke();
-  ctx.restore();
+  // Ribbon at base
+  ctx.save();ctx.translate(handX,handY-4);
+  ctx.beginPath();ctx.ellipse(0,2,16,8,0,0,Math.PI*2);
+  ctx.strokeStyle=isCosmos?'rgba(120,140,190,0.45)':'rgba(190,165,120,0.5)';
+  ctx.lineWidth=3;ctx.stroke();ctx.restore();
 
   // Stats
   const totalBlooms=activeDays.reduce((a,d)=>{
     const e=log[d.iso]||[];const s2=new Set();
-    pursuits.forEach(p=>{if(e.some(tid=>(typeof tid==='string'?tid:tid.tid)===p.id))s2.add(p.id)});
+    pursuits.forEach(p=>{if(e.some(tid=>getTid(tid)===p.id))s2.add(p.id)});
     return a+s2.size;
   },0);
-  document.getElementById('garden-stat').textContent=totalBlooms+' blooms · '+activeDays.length+' days';
+  const gLabel=isCosmos?'stars':'blooms';
+  document.getElementById('garden-stat').textContent=totalBlooms+' '+gLabel+' - '+activeDays.length+' days';
 
-  // Title
   const titleEl=document.getElementById('garden-title');
   if(titleEl){
-    if(gardenSpan==='week')titleEl.textContent='This week';
+    if(gardenSpan==='week')titleEl.textContent=isCosmos?'This week constellation':'This week';
     else if(gardenSpan==='month')titleEl.textContent=MONTHS[viewMonth]+' '+viewYear;
-    else titleEl.textContent='Your garden';
+    else titleEl.textContent=isCosmos?'Your constellation':'Your garden';
   }
+}
+
+// Draw a single full flower in the current painting style
+function drawGardenFlower(ctx,fx,fy,sz,petals,seed,isCosmos){
+  const nPetals=Math.max(petals.length,1);
+  const outerRBase=sz*0.46*(nPetals<=5?1:nPetals<=8?0.88:0.74);
+
+  if(isCosmos){
+    // Comet burst — tails radiating, no centre circle
+    petals.forEach(function(color,pi){
+      const a=(pi/nPetals)*Math.PI*2-Math.PI/2;
+      const outerR=outerRBase*(0.9+rngFlower(seed,pi)*0.2);
+      const tipX=fx+Math.cos(a)*outerR,tipY=fy+Math.sin(a)*outerR;
+      const perpA=a+Math.PI/2;
+      const tw=outerR*0.18;
+      ctx.beginPath();
+      ctx.moveTo(fx+Math.cos(perpA)*tw,fy+Math.sin(perpA)*tw);
+      ctx.lineTo(tipX,tipY);
+      ctx.lineTo(fx-Math.cos(perpA)*tw,fy-Math.sin(perpA)*tw);
+      ctx.closePath();
+      ctx.fillStyle=withAlpha(color,0.55);ctx.fill();
+      ctx.beginPath();ctx.arc(fx+Math.cos(a)*outerR*0.42,fy+Math.sin(a)*outerR*0.42,outerR*0.16,0,Math.PI*2);
+      ctx.fillStyle=withAlpha(color,0.95);ctx.fill();
+    });
+    return;
+  }
+
+  // Strata — layered petals per style
+  const style=currentStyle;
+  // Back layer of petals (larger, offset) for depth
+  for(let layer=0;layer<2;layer++){
+    const layerR=outerRBase*(layer===0?1.0:0.62);
+    const layerRot=layer*Math.PI/nPetals;
+    const layerOp=layer===0?1:0.85;
+    petals.forEach(function(color,pi){
+      const a=(pi/nPetals)*Math.PI*2-Math.PI/2+layerRot;
+      const outerR=layerR*(0.9+rngFlower(seed,pi+layer*10)*0.18);
+      const tipA=a+(rngFlower(seed,pi+50)-0.5)*0.1;
+      const tipX=fx+Math.cos(tipA)*outerR,tipY=fy+Math.sin(tipA)*outerR;
+      const perpA=a+Math.PI/2;
+      const bend=(rngFlower(seed,pi+81)-0.5)*outerR*0.3;
+      const midX=fx+Math.cos(a)*outerR*0.5+Math.cos(perpA)*bend;
+      const midY=fy+Math.sin(a)*outerR*0.5+Math.sin(perpA)*bend;
+      const sw=outerR*(0.34+rngFlower(seed,pi+82)*0.1);
+      ctx.lineCap='round';
+
+      if(style==='watercolour'){
+        [[1.15,0.12],[0.95,0.22],[0.72,0.34]].forEach(function(lr){
+          ctx.beginPath();ctx.moveTo(fx,fy);
+          ctx.quadraticCurveTo(midX*lr[0]+fx*(1-lr[0]),midY*lr[0]+fy*(1-lr[0]),tipX*lr[0]+fx*(1-lr[0]),tipY*lr[0]+fy*(1-lr[0]));
+          ctx.strokeStyle=withAlpha(color,lr[1]*layerOp);ctx.lineWidth=sw*(1+lr[0]*0.4);ctx.stroke();
+        });
+      } else if(style==='inkwash'){
+        ctx.beginPath();ctx.moveTo(fx,fy);ctx.quadraticCurveTo(midX,midY,tipX,tipY);
+        ctx.strokeStyle=withAlpha(saturateHex(color,1.6),0.9*layerOp);ctx.lineWidth=sw*0.9;ctx.stroke();
+      } else if(style==='pointillist'){
+        const steps=5;
+        for(let st=0;st<=steps;st++){
+          const tt=st/steps;
+          const dx=fx+(tipX-fx)*tt,dy=fy+(tipY-fy)*tt;
+          ctx.beginPath();ctx.arc(dx,dy,sw*0.4*(1-tt*0.3),0,Math.PI*2);
+          ctx.fillStyle=withAlpha(color,(0.7+rngFlower(seed,pi*10+st)*0.25)*layerOp);ctx.fill();
+        }
+      } else if(style==='impressionist'){
+        for(let d=0;d<4;d++){
+          const dt=0.3+d*0.2;
+          const dx=fx+(tipX-fx)*dt,dy=fy+(tipY-fy)*dt;
+          const dl=sw*1.2;
+          const dAng=a+Math.PI/2;
+          ctx.beginPath();ctx.moveTo(dx-Math.cos(dAng)*dl/2,dy-Math.sin(dAng)*dl/2);
+          ctx.lineTo(dx+Math.cos(dAng)*dl/2,dy+Math.sin(dAng)*dl/2);
+          ctx.strokeStyle=withAlpha(color,(0.6+rngFlower(seed,pi*10+d)*0.3)*layerOp);
+          ctx.lineWidth=sw*0.6;ctx.stroke();
+        }
+      } else {
+        // expressionist — filled petal with highlight
+        ctx.beginPath();ctx.moveTo(fx,fy);ctx.quadraticCurveTo(midX,midY,tipX,tipY);
+        ctx.strokeStyle=withAlpha(color,0.3*layerOp);ctx.lineWidth=sw*1.25;ctx.stroke();
+        ctx.beginPath();ctx.moveTo(fx,fy);ctx.quadraticCurveTo(midX,midY,tipX,tipY);
+        ctx.strokeStyle=withAlpha(color,0.92*layerOp);ctx.lineWidth=sw;ctx.stroke();
+        ctx.beginPath();ctx.moveTo(fx+Math.cos(perpA)*sw*0.1,fy+Math.sin(perpA)*sw*0.1);
+        ctx.quadraticCurveTo(midX,midY,tipX,tipY);
+        ctx.strokeStyle='rgba(255,255,255,'+(0.35*layerOp).toFixed(2)+')';ctx.lineWidth=sw*0.16;ctx.stroke();
+      }
+    });
+  }
+  // Flower centre — warm dot
+  ctx.beginPath();ctx.arc(fx,fy,sz*0.10,0,Math.PI*2);
+  ctx.fillStyle='rgba(245,200,90,0.85)';ctx.fill();
+  ctx.beginPath();ctx.arc(fx,fy,sz*0.055,0,Math.PI*2);
+  ctx.fillStyle='rgba(220,160,50,0.9)';ctx.fill();
 }
 
 function saveGarden(){
   const canvas=document.getElementById('garden-canvas');
   if(!canvas)return;
-  const a=document.createElement('a');a.download='strata-garden.png';a.href=canvas.toDataURL();a.click();
+  const a=document.createElement('a');a.download='strata-'+(currentTheme==='cosmos'?'constellation':'garden')+'.png';a.href=canvas.toDataURL();a.click();
 }
 
 // =======================================================
@@ -1616,6 +1734,10 @@ function setTheme(t){
   currentTheme=t;
   localStorage.setItem('sp_theme',t);
   document.body.classList.toggle('cosmos',t==='cosmos');
+  // Reset accent to theme default if using the other theme's default
+  const strataDefault='#6b8f71', cosmosDefault='#5a8fd4';
+  if(t==='cosmos'&&accentColor===strataDefault){accentColor=cosmosDefault;localStorage.setItem('sp_accent',accentColor);}
+  if(t==='strata'&&accentColor===cosmosDefault){accentColor=strataDefault;localStorage.setItem('sp_accent',accentColor);}
   // Update theme button active states
   const sb=document.getElementById('theme-strata');
   const cb=document.getElementById('theme-cosmos');
@@ -1649,8 +1771,6 @@ function cometSVG(colors,s,seed){
     svg+=`<path d="M ${(hx+Math.cos(perpA)*w1).toFixed(1)},${(hy+Math.sin(perpA)*w1).toFixed(1)} L ${tx.toFixed(1)},${ty.toFixed(1)} L ${(hx-Math.cos(perpA)*w1).toFixed(1)},${(hy-Math.sin(perpA)*w1).toFixed(1)} Z" fill="${c}" opacity="0.50"/>`;
     svg+=`<circle cx="${hx.toFixed(1)}" cy="${hy.toFixed(1)}" r="${(s*0.075).toFixed(1)}" fill="${c}" opacity="0.95"/>`;
   }
-  svg+=`<circle cx="${cx}" cy="${cy}" r="${(s*0.082).toFixed(1)}" fill="#ffffff" opacity="0.90"/>`;
-  svg+=`<circle cx="${cx}" cy="${cy}" r="${(s*0.042).toFixed(1)}" fill="#ffffff" opacity="0.70"/>`;
   svg+='</svg>';
   return svg;
 }
@@ -1872,18 +1992,29 @@ function loadFromCloud(){
   const doc=getUserDoc();
   if(!doc)return;
   doc.get().then(function(snap){
+    // Count local data
+    const localDays=Object.keys(log).filter(function(d){return(log[d]||[]).length}).length;
     if(snap.exists){
       const data=snap.data();
-      if(data.pursuits)pursuits=data.pursuits;
-      if(data.log)log=data.log;
-      // Save to localStorage as local cache
-      save();
-      // Re-render
-      renderSidebar();
-      if(currentView==='month')renderMonthView();
-      if(currentView==='year')renderYearView();
+      const cloudLog=data.log||{};
+      const cloudDays=Object.keys(cloudLog).filter(function(d){return(cloudLog[d]||[]).length}).length;
+      // Only overwrite local with cloud if cloud has MORE data, or local is empty
+      // This prevents an empty cloud doc from wiping local entries
+      if(cloudDays>=localDays){
+        if(data.pursuits&&data.pursuits.length)pursuits=data.pursuits;
+        log=cloudLog;
+        save();
+        renderSidebar();
+        if(currentView==='month')renderMonthView();
+        if(currentView==='year')renderYearView();
+        if(currentView==='garden')renderGarden();
+        console.log('Firebase: loaded from cloud ('+cloudDays+' days)');
+      } else {
+        // Local has more — push local up to cloud
+        console.log('Firebase: local newer, pushing up');
+        saveToCloud();
+      }
       setSyncStatus('connected');
-      console.log('Firebase: loaded from cloud');
     } else {
       // No cloud data yet — push local data up
       saveToCloud();
@@ -1921,8 +2052,12 @@ function scheduleSave(){
 }
 
 function init(){
-  // Init Firebase sync
-  initFirebase();
+  // Render calendar FIRST so it always shows regardless of Firebase
+  try{
+    renderSidebar();
+    renderMonthView();
+    renderYearView();
+  }catch(e){console.warn('initial render failed:',e.message)}
   // Build onboarding list
   document.getElementById('onboard-list').innerHTML=pursuits.map(p=>`<div class="onboard-pursuit"><div class="onboard-dot" style="background:${p.color}"></div><span style="font-family:var(--mono);font-size:12px;font-weight:500">${p.label}</span></div>`).join('');
   renderSidebar();
@@ -1939,8 +2074,12 @@ function init(){
     artBg=currentTheme==='cosmos'?'#030308':'#faf8f4';
   }
   setTheme(currentTheme);
+  // Guarantee month view renders on load
+  try{renderMonthView();renderYearView();}catch(e){console.warn(e.message)}
   // Resize handler for art canvas
   window.addEventListener('resize',()=>{if(currentView==='art')redrawArt();if(currentView==='garden')renderGarden()});
+  // Init Firebase LAST and non-blocking, so sync errors never break the UI
+  try{initFirebase();}catch(e){console.warn('Firebase init skipped:',e.message);setSyncStatus('offline');}
 }
 init();
 </script>
