@@ -201,6 +201,12 @@ body{
 #art-canvas-wrap{flex:1;min-height:0;margin:0 1rem 0.5rem;border-radius:12px;overflow:hidden;position:relative}
 #art-canvas-wrap canvas{display:block;width:100%;height:100%}
 .art-toolbar{background:var(--bg);border-top:1.5px solid var(--border);flex-shrink:0;padding:6px 0}
+.style-swiper{display:flex;align-items:center;justify-content:center;gap:10px;padding:6px 1rem;flex-shrink:0}
+.style-swiper-arrow{width:30px;height:30px;border-radius:50%;border:1.5px solid var(--border2);background:none;color:var(--ink2);cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.style-swiper-arrow:active{background:var(--bg2)}
+.style-swiper-label{flex:1;text-align:center;font-family:var(--serif);font-style:italic;font-size:16px;color:var(--ink);min-width:0}
+.style-swiper-sub{font-size:8px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink3);font-family:var(--mono);margin-top:1px}
+.comp-swiper{display:flex;align-items:center;justify-content:center;gap:10px;padding:4px 1rem;flex-shrink:0}
 .art-row{display:flex;align-items:center;gap:5px;padding:3px 1rem;flex-wrap:wrap}
 .art-lbl{font-size:7.5px;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink3);flex-shrink:0;font-family:var(--mono)}
 .art-pill{
@@ -320,7 +326,8 @@ body{
   .sidebar-head{padding:0;border:none;flex:1;display:flex;align-items:center;gap:10px}
   .sidebar-wordmark{font-size:20px}
   .sidebar-tagline{display:none}
-  .sidebar-dots{margin:0;flex-wrap:nowrap;overflow-x:auto;max-width:50vw;gap:4px}
+  .sidebar-dots{margin:0;flex-wrap:nowrap;overflow-x:auto;max-width:35vw;gap:4px}
+  #theme-toggle{font-size:8px !important;padding:2px 7px !important}
   .sidebar-dots::-webkit-scrollbar{display:none}
   .palette-dot{width:14px;height:14px}
   .sidebar-body{display:none}  /* hidden — use hamburger drawer instead */
@@ -478,10 +485,15 @@ body{
       <button class="sidebar-hamburger" onclick="openDrawer()" aria-label="Menu">
         <span></span><span></span><span></span>
       </button>
-      <div>
-        <div class="sidebar-wordmark">Strata</div>
+      <div style="flex:1">
+        <div style="display:flex;align-items:center;gap:8px">
+          <div class="sidebar-wordmark">Strata</div>
+          <button id="theme-toggle" onclick="toggleTheme()" title="Switch theme" style="margin-left:auto;display:flex;align-items:center;gap:5px;padding:3px 9px;border-radius:14px;border:1.5px solid var(--border2);background:var(--bg2);cursor:pointer;font-family:var(--mono);font-size:9px;font-weight:500;color:var(--ink2);flex-shrink:0">
+            <span id="theme-toggle-icon">☀</span><span id="theme-toggle-text">Strata</span>
+          </button>
+        </div>
         <div class="sidebar-tagline">where life becomes art</div>
-      <div id="sync-status" style="font-size:8px;font-family:var(--mono);color:#9c8e7a;margin-top:3px"></div>
+        <div id="sync-status" style="font-size:8px;font-family:var(--mono);color:#9c8e7a;margin-top:3px"></div>
       </div>
       <div class="sidebar-dots" id="sidebar-dots"></div>
     </div>
@@ -556,10 +568,16 @@ body{
         <button class="art-pill" data-gspan="month" onclick="setGardenSpan('month')">Month</button>
         <button class="art-pill" data-gspan="all" onclick="setGardenSpan('all')">All time</button>
       </div>
+
       <div style="flex:1;min-height:0;border-radius:12px;overflow:hidden;position:relative;background:#f7f2ea" id="garden-canvas-wrap">
         <canvas id="garden-canvas" style="display:block;width:100%;height:100%"></canvas>
       </div>
       <div style="font-size:9px;font-family:var(--mono);color:var(--ink3);padding:0.3rem 0 0.1rem;flex-shrink:0" id="garden-stat"></div>
+      <div class="style-swiper" style="flex-shrink:0;border-top:1.5px solid var(--border);padding-top:8px">
+        <button class="style-swiper-arrow" onclick="cycleStyle(-1)">‹</button>
+        <div class="style-swiper-label" id="garden-style-label" style="font-size:14px">Expressionist<div class="style-swiper-sub">Painting style</div></div>
+        <button class="style-swiper-arrow" onclick="cycleStyle(1)">›</button>
+      </div>
     </div>
 
     <!-- More / Settings view -->
@@ -662,24 +680,17 @@ body{
       </div>
       <div id="art-canvas-wrap"><canvas id="art-canvas"></canvas></div>
       <div class="art-toolbar">
-        <div class="art-row">
-          <span class="art-lbl">Shape</span>
-          <button class="art-pill active" data-comp="flow" onclick="setComp('flow')">Flow</button>
-          <button class="art-pill" data-comp="radial" onclick="setComp('radial')">Radial</button>
-          <button class="art-pill" data-comp="timeline" onclick="setComp('timeline')">Timeline</button>
-          <button class="art-pill" data-comp="spiral" onclick="setComp('spiral')">Spiral</button>
-          <button class="art-pill" data-comp="grid" onclick="setComp('grid')">Grid</button>
-          <button class="art-pill" data-comp="wave" onclick="setComp('wave')">Wave</button>
-          <button class="art-pill" data-comp="scatter" onclick="setComp('scatter')">Scatter</button>
-          <button class="art-pill" data-comp="vortex" onclick="setComp('vortex')">Vortex</button>
-          <div class="art-sep"></div>
-          <button class="art-pill" data-comp="circle" onclick="setComp('circle')">Circle</button>
-          <button class="art-pill" data-comp="star" onclick="setComp('star')">Star</button>
-          <button class="art-pill" data-comp="sun" onclick="setComp('sun')">Sun</button>
-          <button class="art-pill" data-comp="heart" onclick="setComp('heart')">Heart</button>
-          <button class="art-pill" data-comp="moon" onclick="setComp('moon')">Moon</button>
-          <button class="art-pill" data-comp="tree" onclick="setComp('tree')">Tree</button>
-          <button class="art-pill" data-comp="diamond" onclick="setComp('diamond')">Diamond</button>
+        <!-- Composition swiper -->
+        <div class="comp-swiper">
+          <button class="style-swiper-arrow" onclick="cycleComp(-1)">‹</button>
+          <div class="style-swiper-label" id="comp-label" style="font-size:15px">Flow<div class="style-swiper-sub">Composition</div></div>
+          <button class="style-swiper-arrow" onclick="cycleComp(1)">›</button>
+        </div>
+        <!-- Style swiper -->
+        <div class="style-swiper">
+          <button class="style-swiper-arrow" onclick="cycleStyle(-1)">‹</button>
+          <div class="style-swiper-label" id="art-style-label">Expressionist<div class="style-swiper-sub">Painting style</div></div>
+          <button class="style-swiper-arrow" onclick="cycleStyle(1)">›</button>
         </div>
         <div class="art-row">
           <span class="art-lbl">Span</span>
@@ -790,7 +801,7 @@ Object.keys(log).forEach(function(d){
 });
 let currentStyle=localStorage.getItem('sp_style')||'expressionist';
 let accentColor=localStorage.getItem('sp_accent')||'#6b8f71';
-let artComp=localStorage.getItem('sp_comp')||'flow';
+let artComp=localStorage.getItem('sp_comp')||'star';
 let artSpan=parseInt(localStorage.getItem('sp_span')||'3');
 let artBg=localStorage.getItem('sp_artbg')||'#faf8f4';
 let currentView='month';
@@ -955,7 +966,39 @@ function closeDrawer(){
 }
 function toggleFilter(tid){filterPursuit=filterPursuit===tid?null:tid;renderMonthView()}
 function setAccentColor(c){accentColor=c;localStorage.setItem('sp_accent',c);renderSidebar();renderMonthView()}
-function setStyle(s){currentStyle=s;localStorage.setItem('sp_style',s);document.querySelectorAll('[data-style]').forEach(b=>b.classList.toggle('active',b.dataset.style===s));if(currentView==='month')renderMonthView();if(currentView==='art')redrawArt();if(currentView==='garden')renderGarden();}
+const STYLE_LIST=[['expressionist','Expressionist'],['impressionist','Impressionist'],['pointillist','Pointillist'],['watercolour','Watercolour'],['inkwash','Ink wash']];
+const COMP_LIST=[['star','Star'],['sun','Sun'],['heart','Heart'],['moon','Moon'],['spiral','Spiral'],['wave','Wave'],['tree','Tree']];
+
+function updateStyleLabels(){
+  const cur=STYLE_LIST.find(s=>s[0]===currentStyle);
+  const label=cur?cur[1]:'Expressionist';
+  ['art-style-label','garden-style-label'].forEach(function(id){
+    const el=document.getElementById(id);
+    if(el)el.innerHTML=label+'<div class="style-swiper-sub">Painting style</div>';
+  });
+}
+function cycleStyle(dir){
+  let idx=STYLE_LIST.findIndex(s=>s[0]===currentStyle);
+  if(idx<0)idx=0;
+  idx=(idx+dir+STYLE_LIST.length)%STYLE_LIST.length;
+  setStyle(STYLE_LIST[idx][0]);
+  updateStyleLabels();
+}
+function updateCompLabel(){
+  const cur=COMP_LIST.find(s=>s[0]===artComp);
+  const label=cur?cur[1]:'Flow';
+  const el=document.getElementById('comp-label');
+  if(el)el.innerHTML=label+'<div class="style-swiper-sub">Composition</div>';
+}
+function cycleComp(dir){
+  let idx=COMP_LIST.findIndex(s=>s[0]===artComp);
+  if(idx<0)idx=0;
+  idx=(idx+dir+COMP_LIST.length)%COMP_LIST.length;
+  setComp(COMP_LIST[idx][0]);
+  updateCompLabel();
+}
+
+function setStyle(s){currentStyle=s;localStorage.setItem('sp_style',s);document.querySelectorAll('[data-style]').forEach(b=>b.classList.toggle('active',b.dataset.style===s));updateStyleLabels();if(currentView==='month')renderMonthView();if(currentView==='art')redrawArt();if(currentView==='garden')renderGarden();}
 
 // =======================================================
 // FLOWER SVG RENDERER
@@ -1197,7 +1240,7 @@ function saveEditPanel(){
 // =======================================================
 // ART MODE
 // =======================================================
-function setComp(c){artComp=c;localStorage.setItem('sp_comp',c);document.querySelectorAll('[data-comp]').forEach(b=>b.classList.toggle('active',b.dataset.comp===c));redrawArt()}
+function setComp(c){artComp=c;localStorage.setItem('sp_comp',c);document.querySelectorAll('[data-comp]').forEach(b=>b.classList.toggle('active',b.dataset.comp===c));updateCompLabel();redrawArt()}
 function setSpan(s){artSpan=s;localStorage.setItem('sp_span',s);document.querySelectorAll('[data-span]').forEach(b=>b.classList.toggle('active',b.dataset.span==s));updateArtLabel();redrawArt()}
 function updateArtLabel(){
   const lbl=document.getElementById('art-label');
@@ -1231,20 +1274,26 @@ function toggleBgPicker(){
 
 function getArtEntries(){
   const todayStr=todayIso();
-  if(artSpan===0)return(log[todayStr]||[]).map((tid,i)=>({date:todayStr,tid:getTid(tid),color:taskColorgetTid(tid)}));
-  if(artSpan===-1){const entries=[];for(let i=6;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);const iso=isoDate(d.getFullYear(),d.getMonth(),d.getDate());(log[iso]||[]).forEach(tid=>{entries.push({date:iso,tid:getTid(tid),color:taskColorgetTid(tid)})})}return entries}
+  if(artSpan===0)return(log[todayStr]||[]).map((tid,i)=>({date:todayStr,tid:getTid(tid),color:taskColor(getTid(tid))}));
+  if(artSpan===-1){const entries=[];for(let i=6;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);const iso=isoDate(d.getFullYear(),d.getMonth(),d.getDate());(log[iso]||[]).forEach(tid=>{entries.push({date:iso,tid:getTid(tid),color:taskColor(getTid(tid))})})}return entries}
   const allEntries=[];
   Object.keys(log).sort().forEach(date=>{
     const d=new Date(date+'T12:00:00');
     const mDiff=(viewYear-d.getFullYear())*12+(viewMonth-d.getMonth());
-    if(mDiff>=0&&mDiff<artSpan)(log[date]||[]).forEach(tid=>{allEntries.push({date,tid:getTid(tid),color:taskColorgetTid(tid)})});
+    if(mDiff>=0&&mDiff<artSpan)(log[date]||[]).forEach(tid=>{allEntries.push({date,tid:getTid(tid),color:taskColor(getTid(tid))})});
   });
   return allEntries;
 }
 
 function paintMark(ctx,cx,cy,W,H,color,rng,intensity){
   const style=currentStyle;
+  const isCosmos=currentTheme==='cosmos';
   ctx.save();
+  // In cosmos, add a soft glow behind each mark so colours pop on dark
+  if(isCosmos){
+    ctx.shadowColor=color;
+    ctx.shadowBlur=Math.max(4,W*0.15);
+  }
   if(style==='expressionist'){
     const len=H*(0.72+rng()*0.22),w=Math.max(4,W*0.44*(0.78+rng()*0.28));
     const ang=(rng()-0.5)*Math.PI*2;
@@ -1692,10 +1741,20 @@ function saveGarden(){
 // =======================================================
 let currentTheme=localStorage.getItem('sp_theme')||'strata';
 
+function toggleTheme(){
+  setTheme(currentTheme==='cosmos'?'strata':'cosmos');
+}
+function updateThemeToggle(){
+  const icon=document.getElementById('theme-toggle-icon');
+  const text=document.getElementById('theme-toggle-text');
+  if(icon)icon.textContent=currentTheme==='cosmos'?'☾':'☀';
+  if(text)text.textContent=currentTheme==='cosmos'?'Cosmos':'Strata';
+}
 function setTheme(t){
   currentTheme=t;
   localStorage.setItem('sp_theme',t);
   document.body.classList.toggle('cosmos',t==='cosmos');
+  updateThemeToggle();
   // Reset accent to theme default if using the other theme's default
   const strataDefault='#6b8f71', cosmosDefault='#5a8fd4';
   if(t==='cosmos'&&accentColor===strataDefault){accentColor=cosmosDefault;localStorage.setItem('sp_accent',accentColor);}
@@ -2036,10 +2095,23 @@ function init(){
     artBg=currentTheme==='cosmos'?'#030308':'#faf8f4';
   }
   setTheme(currentTheme);
+  updateStyleLabels();
+  updateCompLabel();
   // Guarantee month view renders on load
   try{renderMonthView();renderYearView();}catch(e){console.warn(e.message)}
   // Resize handler for art canvas
   window.addEventListener('resize',()=>{if(currentView==='art')redrawArt();if(currentView==='garden')renderGarden()});
+  // Swipe gestures on canvases to change style
+  ['art-canvas-wrap','garden-canvas-wrap'].forEach(function(id){
+    const el=document.getElementById(id);
+    if(!el)return;
+    let sx=0;
+    el.addEventListener('touchstart',function(e){sx=e.touches[0].clientX},{passive:true});
+    el.addEventListener('touchend',function(e){
+      const dx=e.changedTouches[0].clientX-sx;
+      if(Math.abs(dx)>50){cycleStyle(dx<0?1:-1)}
+    },{passive:true});
+  });
   // Init Firebase LAST and non-blocking, so sync errors never break the UI
   try{initFirebase();}catch(e){console.warn('Firebase init skipped:',e.message);setSyncStatus('offline');}
 }
